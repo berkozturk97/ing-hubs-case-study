@@ -7,6 +7,8 @@ import {
   setCurrentPage,
   setItemsPerPage,
 } from '../store/actions/ui.js';
+import {deleteEmployeeAsync} from '../store/actions/employees.js';
+import '../components/loading-spinner.js';
 import '../components/employee-table.js';
 
 export class ListEmployeePage extends connect(store)(LitElement) {
@@ -157,8 +159,26 @@ export class ListEmployeePage extends connect(store)(LitElement) {
 
   _handleEmployeeDelete(event) {
     const {employee} = event.detail;
-    console.log('Delete employee:', employee);
-    // TODO: Show confirmation dialog and delete employee
+
+    // Dispatch async delete action
+    store
+      .dispatch(deleteEmployeeAsync(employee.id))
+      .then(() => {
+        // Success - close the modal
+        const table = this.shadowRoot.querySelector('employee-table');
+        if (table) {
+          table.closeDeleteModal();
+        }
+      })
+      .catch((error) => {
+        console.error('Delete failed:', error);
+        // Error handling is managed by the store
+        // Close the modal anyway to show the error state
+        const table = this.shadowRoot.querySelector('employee-table');
+        if (table) {
+          table.closeDeleteModal();
+        }
+      });
   }
 
   render() {
@@ -186,9 +206,11 @@ export class ListEmployeePage extends connect(store)(LitElement) {
       <div class="content-area">
         ${this.loading
           ? html`
-              <div class="loading-state">
-                <div>Loading employees...</div>
-              </div>
+              <loading-spinner
+                overlay
+                size="large"
+                message="${t('common.deleting')}"
+              ></loading-spinner>
             `
           : this.employees.length === 0
           ? html`

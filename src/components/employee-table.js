@@ -1,6 +1,7 @@
 import {LitElement, html, css} from 'lit';
 import {t} from '../localization/index.js';
 import './pagination.js';
+import './delete-confirmation-modal.js';
 
 export class EmployeeTable extends LitElement {
   static get properties() {
@@ -9,6 +10,9 @@ export class EmployeeTable extends LitElement {
       loading: {type: Boolean},
       currentPage: {type: Number},
       itemsPerPage: {type: Number},
+      employeeToDelete: {type: Object},
+      deleteModalOpen: {type: Boolean},
+      deleteLoading: {type: Boolean},
     };
   }
 
@@ -18,6 +22,9 @@ export class EmployeeTable extends LitElement {
     this.loading = false;
     this.currentPage = 1;
     this.itemsPerPage = 10;
+    this.employeeToDelete = null;
+    this.deleteModalOpen = false;
+    this.deleteLoading = false;
   }
 
   static get styles() {
@@ -321,7 +328,20 @@ export class EmployeeTable extends LitElement {
   }
 
   _handleDelete(employee) {
-    // Dispatch delete event - will be implemented later
+    // Open delete confirmation modal
+    this.employeeToDelete = employee;
+    this.deleteModalOpen = true;
+    const modal = this.shadowRoot.querySelector('delete-confirmation-modal');
+    if (modal) {
+      modal.openModal();
+    }
+  }
+
+  _handleDeleteConfirmed(event) {
+    const {employee} = event.detail;
+    this.deleteLoading = true;
+
+    // Dispatch delete event to parent
     this.dispatchEvent(
       new CustomEvent('employee-delete', {
         detail: {employee},
@@ -329,6 +349,23 @@ export class EmployeeTable extends LitElement {
         composed: true,
       })
     );
+  }
+
+  _handleDeleteCancelled() {
+    this.employeeToDelete = null;
+    this.deleteModalOpen = false;
+    this.deleteLoading = false;
+  }
+
+  // Method to be called by parent after successful deletion
+  closeDeleteModal() {
+    this.employeeToDelete = null;
+    this.deleteModalOpen = false;
+    this.deleteLoading = false;
+    const modal = this.shadowRoot.querySelector('delete-confirmation-modal');
+    if (modal) {
+      modal.closeModal();
+    }
   }
 
   _handlePageChange(event) {
@@ -362,14 +399,6 @@ export class EmployeeTable extends LitElement {
   }
 
   render() {
-    if (this.loading) {
-      return html`
-        <div class="loading-state">
-          <div>Loading employees...</div>
-        </div>
-      `;
-    }
-
     if (!this.employees || this.employees.length === 0) {
       return html`
         <div class="empty-state">
@@ -487,6 +516,13 @@ export class EmployeeTable extends LitElement {
         @page-change="${this._handlePageChange}"
         @items-per-page-change="${this._handleItemsPerPageChange}"
       ></app-pagination>
+
+      <delete-confirmation-modal
+        .employee="${this.employeeToDelete}"
+        .loading="${this.deleteLoading}"
+        @delete-confirmed="${this._handleDeleteConfirmed}"
+        @delete-cancelled="${this._handleDeleteCancelled}"
+      ></delete-confirmation-modal>
     `;
   }
 }

@@ -95,5 +95,14 @@ export const tr = {
     creating: 'Çalışan oluşturuluyor...',
     updating: 'Çalışan güncelleniyor...',
     processing: 'İşleniyor...',
+    deleting: 'Çalışan siliniyor...',
+  },
+
+  deleteModal: {
+    title: 'Çalışanı Sil',
+    message: 'Bu çalışan kaydını silmek istediğinizden emin misiniz?',
+    warning: 'Bu işlem geri alınamaz.',
+    confirmButton: 'Çalışanı Sil',
+    cancelButton: 'İptal',
   },
 };

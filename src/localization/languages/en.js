@@ -95,5 +95,14 @@ export const en = {
     creating: 'Creating employee...',
     updating: 'Updating employee...',
     processing: 'Processing...',
+    deleting: 'Deleting employee...',
+  },
+
+  deleteModal: {
+    title: 'Delete Employee',
+    message: 'Are you sure you want to delete this employee record?',
+    warning: 'This action cannot be undone.',
+    confirmButton: 'Delete Employee',
+    cancelButton: 'Cancel',
   },
 };
