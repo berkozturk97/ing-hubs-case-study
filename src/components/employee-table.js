@@ -315,14 +315,9 @@ export class EmployeeTable extends LitElement {
   }
 
   _handleEdit(employee) {
-    // Dispatch edit event - will be implemented later
-    this.dispatchEvent(
-      new CustomEvent('employee-edit', {
-        detail: {employee},
-        bubbles: true,
-        composed: true,
-      })
-    );
+    // Navigate to edit page
+    window.history.pushState({}, '', `/edit-employee/${employee.id}`);
+    window.dispatchEvent(new PopStateEvent('popstate'));
   }
 
   _handleDelete(employee) {

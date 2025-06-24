@@ -3,6 +3,7 @@ import {Router} from '@vaadin/router';
 // Import page components
 import '../pages/list-employee-page.js';
 import '../pages/create-employee-page.js';
+import '../pages/edit-employee-page.js';
 
 export class AppRouter {
   constructor(outlet) {
@@ -26,6 +27,10 @@ export class AppRouter {
       {
         path: '/add-employee',
         component: 'create-employee-page',
+      },
+      {
+        path: '/edit-employee/:id',
+        component: 'edit-employee-page',
       },
       {
         path: '(.*)',

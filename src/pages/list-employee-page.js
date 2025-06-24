@@ -155,12 +155,6 @@ export class ListEmployeePage extends connect(store)(LitElement) {
     store.dispatch(setItemsPerPage(itemsPerPage));
   }
 
-  _handleEmployeeEdit(event) {
-    const {employee} = event.detail;
-    console.log('Edit employee:', employee);
-    // TODO: Navigate to edit page or open edit dialog
-  }
-
   _handleEmployeeDelete(event) {
     const {employee} = event.detail;
     console.log('Delete employee:', employee);
@@ -213,7 +207,6 @@ export class ListEmployeePage extends connect(store)(LitElement) {
                 .itemsPerPage="${this.itemsPerPage}"
                 @page-change="${this._handlePageChange}"
                 @items-per-page-change="${this._handleItemsPerPageChange}"
-                @employee-edit="${this._handleEmployeeEdit}"
                 @employee-delete="${this._handleEmployeeDelete}"
               ></employee-table>
             `

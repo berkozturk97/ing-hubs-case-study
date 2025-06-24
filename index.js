@@ -213,6 +213,50 @@ export class App extends connect(store)(LitElement) {
     // Update document language attribute for localization
     document.documentElement.lang = this.language;
   }
+
+  _createSampleEmployees() {
+    // Import the action
+    import('./src/store/actions/employees.js').then((module) => {
+      const {addEmployee} = module;
+
+      const sampleEmployees = [
+        {
+          firstName: 'Berk',
+          lastName: 'Oz',
+          email: 'berk.oz@ing.com',
+          phone: '+90 (555) 123-4567',
+          dateOfBirth: '1990-05-15',
+          dateOfEmployment: '2025-01-15',
+          department: 'Tech',
+          position: 'Senior',
+        },
+        {
+          firstName: 'Ayse',
+          lastName: 'Kaya',
+          email: 'ayse.kaya@ing.com',
+          phone: '+90 (555) 234-5678',
+          dateOfBirth: '1992-08-20',
+          dateOfEmployment: '2023-03-01',
+          department: 'Analytics',
+          position: 'Medior',
+        },
+        {
+          firstName: 'Cemal',
+          lastName: 'Kaya',
+          email: 'cemal.kaya@ing.com',
+          phone: '+90 (555) 345-6789',
+          dateOfBirth: '1995-12-10',
+          dateOfEmployment: '2023-09-15',
+          department: 'Tech',
+          position: 'Junior',
+        },
+      ];
+
+      sampleEmployees.forEach((employee) => {
+        store.dispatch(addEmployee(employee));
+      });
+    });
+  }
 }
 
 window.customElements.define('main-app', App);
