@@ -1,8 +1,8 @@
 import {LitElement, html, css} from 'lit';
 import {connect} from 'pwa-helpers/connect-mixin.js';
 import {store} from '../store/index.js';
-import {addEmployeeAsync} from '../store/actions/employees.js';
-import {t} from '../localization/index.js';
+
+import '../components/employee-form.js';
 
 export class CreateEmployeePage extends connect(store)(LitElement) {
   static get properties() {
@@ -26,114 +26,75 @@ export class CreateEmployeePage extends connect(store)(LitElement) {
     return css`
       :host {
         display: block;
-        padding: 40px 20px;
+        padding: 20px;
         max-width: 800px;
         margin: 0 auto;
       }
 
-      .page-container {
-        background: white;
-        border-radius: 8px;
-        padding: 32px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      .error-banner {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 16px;
+        border-radius: 6px;
+        margin-bottom: 24px;
+        border-left: 4px solid #d32f2f;
         text-align: center;
       }
 
-      .page-title {
-        font-size: 32px;
-        color: #333;
-        margin-bottom: 16px;
-        font-weight: 600;
-      }
-
-      .test-button {
-        background-color: #ff6200;
-        color: white;
-        border: none;
-        padding: 12px 24px;
+      .success-banner {
+        background-color: #e8f5e8;
+        color: #2e7d2e;
+        padding: 16px;
         border-radius: 6px;
-        font-size: 16px;
-        font-weight: 500;
-        cursor: pointer;
-        margin: 20px 0;
-        transition: background-color 0.3s ease;
+        margin-bottom: 24px;
+        border-left: 4px solid #4caf50;
+        text-align: center;
       }
 
-      .test-button:hover {
-        background-color: #e55100;
-      }
-
-      .test-button:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-      }
-
-      .error-message {
-        color: #d32f2f;
-        background-color: #ffebee;
-        padding: 12px;
-        border-radius: 6px;
-        margin: 16px 0;
-        border: 1px solid #ffcdd2;
-      }
-
-      .coming-soon {
-        font-size: 14px;
-        color: #ff6200;
-        background-color: #fff3e0;
-        padding: 12px 24px;
-        border-radius: 6px;
-        display: inline-block;
-        border: 1px solid #ffcc80;
-        margin-top: 20px;
+      /* Mobile responsive */
+      @media (max-width: 768px) {
+        :host {
+          padding: 16px;
+        }
       }
     `;
   }
 
-  _addSampleEmployee() {
-    const sampleEmployee = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: `john.doe.${Date.now()}@example.com`,
-      phone: '+1234567890',
-      dateOfBirth: '1990-01-01',
-      dateOfEmployment: new Date().toISOString().split('T')[0],
-      department: 'Tech',
-      position: 'Senior',
-    };
+  _handleEmployeeCreate() {
+    this._showSuccessAndNavigate();
+  }
 
-    store
-      .dispatch(addEmployeeAsync(sampleEmployee))
-      .then(() => {
-        window.history.pushState({}, '', '/employees');
-        window.dispatchEvent(new PopStateEvent('popstate'));
-      })
-      .catch((error) => {
-        console.error('Failed to add employee:', error);
-      });
+  _handleFormCancel() {
+    this._navigateToEmployeeList();
+  }
+
+  _showSuccessAndNavigate() {
+    //TODO: add toast notification
+    setTimeout(() => {
+      this._navigateToEmployeeList();
+    }, 100);
+  }
+
+  _navigateToEmployeeList() {
+    window.history.pushState({}, '', '/employees');
+    window.dispatchEvent(new PopStateEvent('popstate'));
   }
 
   render() {
     return html`
-      <div class="page-container">
-        <h1 class="page-title">${t('employees.addEmployee')}</h1>
+      ${this.error
+        ? html`
+            <div class="error-banner">
+              <strong>Error:</strong> ${this.error}
+            </div>
+          `
+        : ''}
 
-        <button
-          class="test-button"
-          @click="${this._addSampleEmployee}"
-          ?disabled="${this.loading}"
-        >
-          ${this.loading ? 'Adding...' : 'Add Sample Employee'}
-        </button>
-
-        ${this.error
-          ? html` <div class="error-message">${this.error}</div> `
-          : ''}
-
-        <div class="coming-soon">
-          🚧 Full Employee Creation Form - Coming Soon
-        </div>
-      </div>
+      <employee-form
+        .loading="${this.loading}"
+        @employee-created="${this._handleEmployeeCreate}"
+        @form-cancel="${this._handleFormCancel}"
+      ></employee-form>
     `;
   }
 }

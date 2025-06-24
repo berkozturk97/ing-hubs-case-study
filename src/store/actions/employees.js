@@ -60,52 +60,58 @@ export const addEmployeeAsync = (employee) => (dispatch) => {
   dispatch(setLoading(true));
   dispatch(clearError());
 
-  try {
-    if (!employee.firstName || !employee.lastName || !employee.email) {
-      throw new Error('First name, last name, and email are required');
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(employee.email)) {
-      throw new Error('Please enter a valid email address');
-    }
-
-    dispatch(addEmployee(employee));
-    dispatch(setLoading(false));
-    return Promise.resolve();
-  } catch (error) {
-    dispatch(setError(error.message));
-    dispatch(setLoading(false));
-    return Promise.reject(error);
-  }
+  // Simulate API call delay
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        dispatch(addEmployee(employee));
+        dispatch(setLoading(false));
+        resolve();
+      } catch (error) {
+        dispatch(setError(error.message));
+        dispatch(setLoading(false));
+        reject(error);
+      }
+    }, 2000);
+  });
 };
 
 export const updateEmployeeAsync = (id, updates) => (dispatch) => {
   dispatch(setLoading(true));
   dispatch(clearError());
 
-  try {
-    dispatch(updateEmployee(id, updates));
-    dispatch(setLoading(false));
-    return Promise.resolve();
-  } catch (error) {
-    dispatch(setError(error.message));
-    dispatch(setLoading(false));
-    return Promise.reject(error);
-  }
+  // Simulate API call delay
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        dispatch(updateEmployee(id, updates));
+        dispatch(setLoading(false));
+        resolve();
+      } catch (error) {
+        dispatch(setError(error.message));
+        dispatch(setLoading(false));
+        reject(error);
+      }
+    }, 2000);
+  });
 };
 
 export const deleteEmployeeAsync = (id) => (dispatch) => {
   dispatch(setLoading(true));
   dispatch(clearError());
 
-  try {
-    dispatch(deleteEmployee(id));
-    dispatch(setLoading(false));
-    return Promise.resolve();
-  } catch (error) {
-    dispatch(setError(error.message));
-    dispatch(setLoading(false));
-    return Promise.reject(error);
-  }
+  // Simulate API call delay
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      try {
+        dispatch(deleteEmployee(id));
+        dispatch(setLoading(false));
+        resolve();
+      } catch (error) {
+        dispatch(setError(error.message));
+        dispatch(setLoading(false));
+        reject(error);
+      }
+    }, 1000); // Shorter delay for delete operations
+  });
 };
