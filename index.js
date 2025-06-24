@@ -8,11 +8,14 @@ import {LitElement, html, css} from 'lit';
 import './src/components/navigation-bar.js';
 import {localizationService} from './src/localization/index.js';
 import {AppRouter} from './src/utils/router.js';
+import {connect} from 'pwa-helpers/connect-mixin.js';
+import {store} from './src/store/index.js';
+import {setCurrentRoute} from './src/store/actions/ui.js';
 
 /**
  * Employee Management Application Main Component
  */
-export class App extends LitElement {
+export class App extends connect(store)(LitElement) {
   static get styles() {
     return css`
       :host {
@@ -180,13 +183,19 @@ export class App extends LitElement {
     `;
   }
 
+  stateChanged(state) {
+    // Subscribe to Redux state changes
+    this.currentRoute = state.ui.currentRoute;
+  }
+
   _handleNavigationChange(event) {
-    this.currentRoute = event.detail.route;
+    const route = event.detail.route;
+
+    // Update Redux state
+    store.dispatch(setCurrentRoute(route));
+
     if (this.router) {
-      const path =
-        event.detail.route === 'employees'
-          ? '/employees'
-          : `/${event.detail.route}`;
+      const path = route === 'employees' ? '/employees' : `/${route}`;
       this.router.navigate(path);
     }
   }
