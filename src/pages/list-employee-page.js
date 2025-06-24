@@ -2,6 +2,7 @@ import {LitElement, html, css} from 'lit';
 import {connect} from 'pwa-helpers/connect-mixin.js';
 import {store} from '../store/index.js';
 import {t} from '../localization/index.js';
+import '../components/employee-table.js';
 
 export class ListEmployeePage extends connect(store)(LitElement) {
   static get properties() {
@@ -9,6 +10,7 @@ export class ListEmployeePage extends connect(store)(LitElement) {
       employees: {type: Array},
       loading: {type: Boolean},
       error: {type: String},
+      viewMode: {type: String},
     };
   }
 
@@ -17,12 +19,14 @@ export class ListEmployeePage extends connect(store)(LitElement) {
     this.employees = [];
     this.loading = false;
     this.error = null;
+    this.viewMode = 'table';
   }
 
   stateChanged(state) {
     this.employees = state.employees.list;
     this.loading = state.employees.loading;
     this.error = state.employees.error;
+    this.viewMode = state.ui.viewMode;
   }
   static get styles() {
     return css`
@@ -45,6 +49,44 @@ export class ListEmployeePage extends connect(store)(LitElement) {
         color: #333;
         margin-bottom: 24px;
         font-weight: 600;
+      }
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .view-toggle {
+        display: flex;
+        gap: 8px;
+      }
+
+      .view-button {
+        padding: 8px 16px;
+        border: 1px solid #e0e0e0;
+        background: white;
+        color: #666;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .view-button:hover {
+        background-color: #f5f5f5;
+      }
+
+      .view-button.active {
+        background-color: #ff6200;
+        color: white;
+        border-color: #ff6200;
       }
 
       .empty-state {
@@ -154,10 +196,42 @@ export class ListEmployeePage extends connect(store)(LitElement) {
     `;
   }
 
+  _handleViewModeChange(mode) {
+    // Will implement Redux action later
+    this.viewMode = mode;
+  }
+
+  _handleEmployeeEdit(event) {
+    console.log('Edit employee:', event.detail.employee);
+    // TODO: Navigate to edit page or open edit modal
+  }
+
+  _handleEmployeeDelete(event) {
+    console.log('Delete employee:', event.detail.employee);
+    // TODO: Show confirmation dialog and delete employee
+  }
+
   render() {
     return html`
       <div class="page-container">
-        <h1 class="page-title">${t('employees.title')}</h1>
+        <div class="page-header">
+          <h1 class="page-title">${t('employees.title')}</h1>
+
+          <div class="view-toggle">
+            <button
+              class="view-button ${this.viewMode === 'list' ? 'active' : ''}"
+              @click="${() => this._handleViewModeChange('list')}"
+            >
+              📋 ${t('employees.viewModeList')}
+            </button>
+            <button
+              class="view-button ${this.viewMode === 'table' ? 'active' : ''}"
+              @click="${() => this._handleViewModeChange('table')}"
+            >
+              📊 ${t('employees.viewModeTable')}
+            </button>
+          </div>
+        </div>
 
         ${this.employees.length === 0
           ? html`
@@ -173,24 +247,35 @@ export class ListEmployeePage extends connect(store)(LitElement) {
               </div>
             `
           : html`
-              <div class="employee-list">
-                ${this.employees.map(
-                  (employee) => html`
-                    <div class="employee-card">
-                      <h3>${employee.firstName} ${employee.lastName}</h3>
-                      <p>📧 ${employee.email}</p>
-                      <p>🏢 ${employee.department}</p>
-                      <p>💼 ${employee.position}</p>
-                      <p>
-                        📅
-                        ${new Date(
-                          employee.dateOfEmployment
-                        ).toLocaleDateString()}
-                      </p>
-                    </div>
+              ${this.viewMode === 'table'
+                ? html`
+                    <employee-table
+                      .employees="${this.employees}"
+                      .loading="${this.loading}"
+                      @employee-edit="${this._handleEmployeeEdit}"
+                      @employee-delete="${this._handleEmployeeDelete}"
+                    ></employee-table>
                   `
-                )}
-              </div>
+                : html`
+                    <div class="employee-list">
+                      ${this.employees.map(
+                        (employee) => html`
+                          <div class="employee-card">
+                            <h3>${employee.firstName} ${employee.lastName}</h3>
+                            <p>📧 ${employee.email}</p>
+                            <p>🏢 ${employee.department}</p>
+                            <p>💼 ${employee.position}</p>
+                            <p>
+                              📅
+                              ${new Date(
+                                employee.dateOfEmployment
+                              ).toLocaleDateString()}
+                            </p>
+                          </div>
+                        `
+                      )}
+                    </div>
+                  `}
             `}
       </div>
     `;

@@ -10,7 +10,7 @@ import {
 } from '../actions/types.js';
 
 const initialState = {
-  viewMode: 'list', // 'list' or 'table'
+  viewMode: 'table', // 'list' or 'table'
   currentRoute: 'employees',
   filters: {
     search: '',
