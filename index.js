@@ -141,6 +141,14 @@ export class App extends connect(store)(LitElement) {
         this.language = newLanguage;
       }
     );
+
+    // Initialize sample data if no employees exist
+    setTimeout(() => {
+      const state = store.getState();
+      if (!state.employees.list || state.employees.list.length === 0) {
+        this._createSampleEmployees();
+      }
+    }, 100);
   }
 
   firstUpdated() {

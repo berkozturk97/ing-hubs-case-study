@@ -1,11 +1,14 @@
 import {LitElement, html, css} from 'lit';
 import {t} from '../localization/index.js';
+import './pagination.js';
 
 export class EmployeeTable extends LitElement {
   static get properties() {
     return {
       employees: {type: Array},
       loading: {type: Boolean},
+      currentPage: {type: Number},
+      itemsPerPage: {type: Number},
     };
   }
 
@@ -13,6 +16,8 @@ export class EmployeeTable extends LitElement {
     super();
     this.employees = [];
     this.loading = false;
+    this.currentPage = 1;
+    this.itemsPerPage = 10;
   }
 
   static get styles() {
@@ -331,6 +336,36 @@ export class EmployeeTable extends LitElement {
     );
   }
 
+  _handlePageChange(event) {
+    this.dispatchEvent(
+      new CustomEvent('page-change', {
+        detail: event.detail,
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  _handleItemsPerPageChange(event) {
+    this.dispatchEvent(
+      new CustomEvent('items-per-page-change', {
+        detail: event.detail,
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  get paginatedEmployees() {
+    if (!this.employees || this.employees.length === 0) {
+      return [];
+    }
+
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.employees.slice(startIndex, endIndex);
+  }
+
   render() {
     if (this.loading) {
       return html`
@@ -366,7 +401,7 @@ export class EmployeeTable extends LitElement {
             </tr>
           </thead>
           <tbody>
-            ${this.employees.map(
+            ${this.paginatedEmployees.map(
               (employee) => html`
                 <tr class="table-row">
                   <td
@@ -449,6 +484,14 @@ export class EmployeeTable extends LitElement {
           </tbody>
         </table>
       </div>
+
+      <app-pagination
+        .currentPage="${this.currentPage}"
+        .totalItems="${this.employees?.length || 0}"
+        .itemsPerPage="${this.itemsPerPage}"
+        @page-change="${this._handlePageChange}"
+        @items-per-page-change="${this._handleItemsPerPageChange}"
+      ></app-pagination>
     `;
   }
 }
