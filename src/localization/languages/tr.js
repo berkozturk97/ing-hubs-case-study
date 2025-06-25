@@ -40,6 +40,11 @@ export const tr = {
     phoneHelp: 'Uluslararası numaralar için ülke kodunu ekleyin',
     selectDepartment: 'Departman Seçin',
     selectPosition: 'Pozisyon Seçin',
+    updateConfirmation: {
+      title: 'Çalışanı Güncelle',
+      message: 'Bu çalışan kaydını güncellemek istediğinizden emin misiniz?',
+      warning: 'Bu işlem mevcut bilgileri değiştirecektir.',
+    },
   },
 
   departments: {

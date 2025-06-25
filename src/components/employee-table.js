@@ -1,7 +1,7 @@
 import {LitElement, html, css} from 'lit';
 import {t} from '../localization/index.js';
 import './pagination.js';
-import './delete-confirmation-modal.js';
+import './confirmation-modal.js';
 
 export class EmployeeTable extends LitElement {
   static get properties() {
@@ -322,29 +322,25 @@ export class EmployeeTable extends LitElement {
   }
 
   _handleEdit(employee) {
-    // Navigate to edit page
     window.history.pushState({}, '', `/edit-employee/${employee.id}`);
     window.dispatchEvent(new PopStateEvent('popstate'));
   }
 
   _handleDelete(employee) {
-    // Open delete confirmation modal
     this.employeeToDelete = employee;
     this.deleteModalOpen = true;
-    const modal = this.shadowRoot.querySelector('delete-confirmation-modal');
+    const modal = this.shadowRoot.querySelector('confirmation-modal');
     if (modal) {
       modal.openModal();
     }
   }
 
-  _handleDeleteConfirmed(event) {
-    const {employee} = event.detail;
+  _handleDeleteConfirmed() {
     this.deleteLoading = true;
 
-    // Dispatch delete event to parent
     this.dispatchEvent(
       new CustomEvent('employee-delete', {
-        detail: {employee},
+        detail: {employee: this.employeeToDelete},
         bubbles: true,
         composed: true,
       })
@@ -357,12 +353,11 @@ export class EmployeeTable extends LitElement {
     this.deleteLoading = false;
   }
 
-  // Method to be called by parent after successful deletion
   closeDeleteModal() {
     this.employeeToDelete = null;
     this.deleteModalOpen = false;
     this.deleteLoading = false;
-    const modal = this.shadowRoot.querySelector('delete-confirmation-modal');
+    const modal = this.shadowRoot.querySelector('confirmation-modal');
     if (modal) {
       modal.closeModal();
     }
@@ -517,12 +512,24 @@ export class EmployeeTable extends LitElement {
         @items-per-page-change="${this._handleItemsPerPageChange}"
       ></app-pagination>
 
-      <delete-confirmation-modal
-        .employee="${this.employeeToDelete}"
-        .loading="${this.deleteLoading}"
-        @delete-confirmed="${this._handleDeleteConfirmed}"
-        @delete-cancelled="${this._handleDeleteCancelled}"
-      ></delete-confirmation-modal>
+      <confirmation-modal
+        ?open="${this.deleteModalOpen}"
+        title="${t('deleteModal.title')}"
+        message="${t('deleteModal.message')}"
+        warningText="${t('deleteModal.warning')}"
+        confirmButtonText="${t('deleteModal.confirmButton')}"
+        cancelButtonText="${t('deleteModal.cancelButton')}"
+        confirmButtonVariant="danger"
+        ?loading="${this.deleteLoading}"
+        .data="${this.employeeToDelete
+          ? {
+              title: `${this.employeeToDelete.firstName} ${this.employeeToDelete.lastName}`,
+              details: `${this.employeeToDelete.department} - ${this.employeeToDelete.position}`,
+            }
+          : null}"
+        @confirmation-confirmed="${this._handleDeleteConfirmed}"
+        @confirmation-cancelled="${this._handleDeleteCancelled}"
+      ></confirmation-modal>
     `;
   }
 }

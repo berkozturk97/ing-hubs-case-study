@@ -40,6 +40,11 @@ export const en = {
     phoneHelp: 'Include country code for international numbers',
     selectDepartment: 'Select Department',
     selectPosition: 'Select Position',
+    updateConfirmation: {
+      title: 'Update Employee',
+      message: 'Are you sure you want to update this employee record?',
+      warning: 'This will overwrite the existing information.',
+    },
   },
 
   departments: {

@@ -8,6 +8,7 @@ import {
 } from '../store/actions/employees.js';
 import './custom-button.js';
 import './loading-spinner.js';
+import './confirmation-modal.js';
 
 export class EmployeeForm extends connect(store)(LitElement) {
   static get properties() {
@@ -17,6 +18,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
       errors: {type: Object},
       existingEmployees: {type: Array},
       loading: {type: Boolean},
+      showUpdateConfirmation: {type: Boolean},
     };
   }
 
@@ -27,6 +29,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
     this.loading = false;
     this.errors = {};
     this.existingEmployees = [];
+    this.showUpdateConfirmation = false;
     this._initializeFormData();
   }
 
@@ -373,41 +376,60 @@ export class EmployeeForm extends connect(store)(LitElement) {
       return;
     }
 
-    const eventData = this.isEditMode
-      ? {...this.formData, id: this.employee.id}
-      : {...this.formData};
-
     if (this.isEditMode) {
-      store
-        .dispatch(updateEmployeeAsync(this.employee.id, this.formData))
-        .then(() => {
-          this.dispatchEvent(
-            new CustomEvent('employee-updated', {
-              detail: {employee: eventData},
-              bubbles: true,
-              composed: true,
-            })
-          );
-        })
-        .catch((error) => {
-          console.error('Update failed:', error);
-        });
+      // Show confirmation modal for updates
+      this.showUpdateConfirmation = true;
     } else {
-      store
-        .dispatch(addEmployeeAsync(this.formData))
-        .then(() => {
-          this.dispatchEvent(
-            new CustomEvent('employee-created', {
-              detail: {employee: eventData},
-              bubbles: true,
-              composed: true,
-            })
-          );
-        })
-        .catch((error) => {
-          console.error('Creation failed:', error);
-        });
+      // Direct creation for new employees
+      this._performCreateEmployee();
     }
+  }
+
+  _performCreateEmployee() {
+    const eventData = {...this.formData};
+
+    store
+      .dispatch(addEmployeeAsync(this.formData))
+      .then(() => {
+        this.dispatchEvent(
+          new CustomEvent('employee-created', {
+            detail: {employee: eventData},
+            bubbles: true,
+            composed: true,
+          })
+        );
+      })
+      .catch((error) => {
+        console.error('Creation failed:', error);
+      });
+  }
+
+  _performUpdateEmployee() {
+    const eventData = {...this.formData, id: this.employee.id};
+
+    store
+      .dispatch(updateEmployeeAsync(this.employee.id, this.formData))
+      .then(() => {
+        this.dispatchEvent(
+          new CustomEvent('employee-updated', {
+            detail: {employee: eventData},
+            bubbles: true,
+            composed: true,
+          })
+        );
+      })
+      .catch((error) => {
+        console.error('Update failed:', error);
+      });
+  }
+
+  _handleUpdateConfirmed() {
+    this.showUpdateConfirmation = false;
+    this._performUpdateEmployee();
+  }
+
+  _handleUpdateCancelled() {
+    this.showUpdateConfirmation = false;
   }
 
   _handleCancel() {
@@ -686,6 +708,26 @@ export class EmployeeForm extends connect(store)(LitElement) {
           </custom-button>
         </div>
       </form>
+
+      <!-- Update Confirmation Modal -->
+      <confirmation-modal
+        ?open="${this.showUpdateConfirmation}"
+        title="${t('employeeForm.updateConfirmation.title')}"
+        message="${t('employeeForm.updateConfirmation.message')}"
+        warningText="${t('employeeForm.updateConfirmation.warning')}"
+        confirmButtonText="${t('common.update')}"
+        cancelButtonText="${t('common.cancel')}"
+        confirmButtonVariant="primary"
+        ?loading="${this.loading}"
+        .data="${this.employee
+          ? {
+              title: `${this.formData.firstName} ${this.formData.lastName}`,
+              details: `${this.formData.department} - ${this.formData.position}`,
+            }
+          : null}"
+        @confirmation-confirmed="${this._handleUpdateConfirmed}"
+        @confirmation-cancelled="${this._handleUpdateCancelled}"
+      ></confirmation-modal>
     `;
   }
 }
