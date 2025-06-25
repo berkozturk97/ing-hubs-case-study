@@ -8,6 +8,7 @@ import {
   setItemsPerPage,
 } from '../store/actions/ui.js';
 import {deleteEmployeeAsync} from '../store/actions/employees.js';
+import {toastService} from '../utils/toast-service.js';
 import '../components/loading-spinner.js';
 import '../components/employee-table.js';
 
@@ -160,11 +161,16 @@ export class ListEmployeePage extends connect(store)(LitElement) {
   _handleEmployeeDelete(event) {
     const {employee} = event.detail;
 
-    // Dispatch async delete action
     store
       .dispatch(deleteEmployeeAsync(employee.id))
       .then(() => {
-        // Success - close the modal
+        // Show success toast
+        toastService.success(
+          t('toast.employeeDeleted'),
+          4000,
+          t('toast.employeeDeletedDesc')
+        );
+
         const table = this.shadowRoot.querySelector('employee-table');
         if (table) {
           table.closeDeleteModal();
@@ -172,8 +178,13 @@ export class ListEmployeePage extends connect(store)(LitElement) {
       })
       .catch((error) => {
         console.error('Delete failed:', error);
-        // Error handling is managed by the store
-        // Close the modal anyway to show the error state
+
+        toastService.error(
+          t('toast.deleteError'),
+          6000,
+          error.message || 'An unexpected error occurred'
+        );
+
         const table = this.shadowRoot.querySelector('employee-table');
         if (table) {
           table.closeDeleteModal();

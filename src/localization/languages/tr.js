@@ -110,4 +110,16 @@ export const tr = {
     confirmButton: 'Çalışanı Sil',
     cancelButton: 'İptal',
   },
+
+  toast: {
+    employeeCreated: 'Çalışan başarıyla oluşturuldu',
+    employeeUpdated: 'Çalışan başarıyla güncellendi',
+    employeeDeleted: 'Çalışan başarıyla silindi',
+    createError: 'Çalışan oluşturulamadı',
+    updateError: 'Çalışan güncellenemedi',
+    deleteError: 'Çalışan silinemedi',
+    employeeCreatedDesc: 'Yeni çalışan sisteme eklendi',
+    employeeUpdatedDesc: 'Çalışan bilgileri güncellendi',
+    employeeDeletedDesc: 'Çalışan sistemden kaldırıldı',
+  },
 };

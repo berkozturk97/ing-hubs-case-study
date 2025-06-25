@@ -110,4 +110,16 @@ export const en = {
     confirmButton: 'Delete Employee',
     cancelButton: 'Cancel',
   },
+
+  toast: {
+    employeeCreated: 'Employee created successfully',
+    employeeUpdated: 'Employee updated successfully',
+    employeeDeleted: 'Employee deleted successfully',
+    createError: 'Failed to create employee',
+    updateError: 'Failed to update employee',
+    deleteError: 'Failed to delete employee',
+    employeeCreatedDesc: 'The new employee has been added to the system',
+    employeeUpdatedDesc: 'Employee information has been updated',
+    employeeDeletedDesc: 'The employee has been removed from the system',
+  },
 };

@@ -6,6 +6,7 @@ import {
   addEmployeeAsync,
   updateEmployeeAsync,
 } from '../store/actions/employees.js';
+import {toastService} from '../utils/toast-service.js';
 import './custom-button.js';
 import './loading-spinner.js';
 import './confirmation-modal.js';
@@ -391,6 +392,13 @@ export class EmployeeForm extends connect(store)(LitElement) {
     store
       .dispatch(addEmployeeAsync(this.formData))
       .then(() => {
+        // Show success toast
+        toastService.success(
+          t('toast.employeeCreated'),
+          4000,
+          t('toast.employeeCreatedDesc')
+        );
+
         this.dispatchEvent(
           new CustomEvent('employee-created', {
             detail: {employee: eventData},
@@ -401,6 +409,11 @@ export class EmployeeForm extends connect(store)(LitElement) {
       })
       .catch((error) => {
         console.error('Creation failed:', error);
+        toastService.error(
+          t('toast.createError'),
+          6000,
+          error.message || 'An unexpected error occurred'
+        );
       });
   }
 
@@ -410,6 +423,12 @@ export class EmployeeForm extends connect(store)(LitElement) {
     store
       .dispatch(updateEmployeeAsync(this.employee.id, this.formData))
       .then(() => {
+        toastService.success(
+          t('toast.employeeUpdated'),
+          4000,
+          t('toast.employeeUpdatedDesc')
+        );
+
         this.dispatchEvent(
           new CustomEvent('employee-updated', {
             detail: {employee: eventData},
@@ -420,6 +439,11 @@ export class EmployeeForm extends connect(store)(LitElement) {
       })
       .catch((error) => {
         console.error('Update failed:', error);
+        toastService.error(
+          t('toast.updateError'),
+          6000,
+          error.message || 'An unexpected error occurred'
+        );
       });
   }
 

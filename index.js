@@ -6,11 +6,13 @@
 
 import {LitElement, html, css} from 'lit';
 import './src/components/navigation-bar.js';
+import './src/components/toast-manager.js';
 import {localizationService} from './src/localization/index.js';
 import {AppRouter} from './src/utils/router.js';
 import {connect} from 'pwa-helpers/connect-mixin.js';
 import {store} from './src/store/index.js';
 import {setCurrentRoute} from './src/store/actions/ui.js';
+import {toastService} from './src/utils/toast-service.js';
 
 /**
  * Employee Management Application Main Component
@@ -152,6 +154,12 @@ export class App extends connect(store)(LitElement) {
   }
 
   firstUpdated() {
+    // Initialize toast service
+    const toastManager = this.shadowRoot.querySelector('toast-manager');
+    if (toastManager) {
+      toastService.init(toastManager);
+    }
+
     setTimeout(() => {
       const outlet = this.shadowRoot.querySelector('#outlet');
       if (outlet) {
@@ -187,6 +195,9 @@ export class App extends connect(store)(LitElement) {
         <main class="main-content">
           <div id="outlet"></div>
         </main>
+
+        <!-- Global Toast Manager -->
+        <toast-manager></toast-manager>
       </div>
     `;
   }
