@@ -6,7 +6,7 @@ export class LoadingSpinner extends LitElement {
       size: {type: String}, // 'small', 'medium', 'large'
       color: {type: String},
       message: {type: String},
-      overlay: {type: Boolean}, // For full-screen overlay
+      overlay: {type: Boolean, reflect: true}, // For full-screen overlay
     };
   }
 
