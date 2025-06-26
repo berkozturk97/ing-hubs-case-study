@@ -221,7 +221,6 @@ export class EmployeeTable extends ReduxLocalizedMixin(LitElement) {
         color: #666;
       }
 
-      /* Tablet responsive */
       @media (max-width: 1200px) {
         .table {
           min-width: 800px;
@@ -317,6 +316,16 @@ export class EmployeeTable extends ReduxLocalizedMixin(LitElement) {
       default:
         return 'position-junior';
     }
+  }
+
+  _getLocalizedDepartment(department) {
+    const key = department?.toLowerCase();
+    return this.t(`departments.${key}`) || department;
+  }
+
+  _getLocalizedPosition(position) {
+    const key = position?.toLowerCase();
+    return this.t(`positions.${key}`) || position;
   }
 
   _handleEdit(employee) {
@@ -465,7 +474,8 @@ export class EmployeeTable extends ReduxLocalizedMixin(LitElement) {
                         employee.department
                       )}"
                     >
-                      ${employee.department || '-'}
+                      ${this._getLocalizedDepartment(employee.department) ||
+                      '-'}
                     </span>
                   </td>
                   <td class="table-cell">
@@ -474,7 +484,7 @@ export class EmployeeTable extends ReduxLocalizedMixin(LitElement) {
                         employee.position
                       )}"
                     >
-                      ${employee.position || '-'}
+                      ${this._getLocalizedPosition(employee.position) || '-'}
                     </span>
                   </td>
                   <td class="table-cell action-cell">
@@ -522,7 +532,11 @@ export class EmployeeTable extends ReduxLocalizedMixin(LitElement) {
         .data="${this.employeeToDelete
           ? {
               title: `${this.employeeToDelete.firstName} ${this.employeeToDelete.lastName}`,
-              details: `${this.employeeToDelete.department} - ${this.employeeToDelete.position}`,
+              details: `${this._getLocalizedDepartment(
+                this.employeeToDelete.department
+              )} - ${this._getLocalizedPosition(
+                this.employeeToDelete.position
+              )}`,
             }
           : null}"
         @confirmation-confirmed="${this._handleDeleteConfirmed}"

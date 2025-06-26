@@ -53,7 +53,7 @@ export const tr = {
   },
 
   positions: {
-    junior: 'Junior',
+    junior: 'Başlangıç',
     medior: 'Orta Seviye',
     senior: 'Kıdemli',
   },

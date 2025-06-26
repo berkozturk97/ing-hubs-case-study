@@ -85,12 +85,18 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
         font-weight: 600;
         color: #333;
         margin: 0 0 4px 0;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.4;
       }
 
       .employee-title {
         color: #666;
         font-size: 14px;
         margin: 0 0 8px 0;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.4;
       }
 
       .badges-container {
@@ -155,6 +161,8 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
         display: flex;
         flex-direction: column;
         gap: 4px;
+        min-width: 0;
+        overflow: hidden;
       }
 
       .detail-label {
@@ -169,11 +177,16 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
         font-size: 14px;
         color: #333;
         font-weight: 500;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        min-width: 0;
       }
 
       .detail-value.email {
         color: #1976d2;
         text-decoration: none;
+        word-break: break-all;
+        overflow-wrap: anywhere;
       }
 
       .detail-value.email:hover {
@@ -278,7 +291,7 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
         }
 
         .card-details {
-          grid-template-columns: 1fr;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
           gap: 12px;
         }
 
@@ -307,6 +320,96 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
         .badges-container {
           flex-direction: column;
           align-items: flex-start;
+        }
+
+        .card-details {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+      }
+
+      @media (max-width: 375px) {
+        .list-container {
+          margin: 0;
+          border-radius: 0;
+          border-left: none;
+          border-right: none;
+        }
+
+        .employee-cards {
+          padding: 4px;
+          gap: 8px;
+        }
+
+        .employee-card {
+          padding: 12px;
+          margin: 0;
+          border-radius: 4px;
+        }
+
+        .employee-name {
+          font-size: 15px;
+          line-height: 1.3;
+        }
+
+        .employee-title {
+          font-size: 13px;
+          line-height: 1.3;
+        }
+
+        .department-badge,
+        .position-badge {
+          font-size: 10px;
+          padding: 3px 8px;
+        }
+
+        .detail-label {
+          font-size: 11px;
+        }
+
+        .detail-value {
+          font-size: 13px;
+          line-height: 1.3;
+        }
+
+        .action-button {
+          font-size: 13px;
+          padding: 8px 12px;
+        }
+
+        .card-details {
+          gap: 8px;
+        }
+
+        .detail-item {
+          gap: 2px;
+        }
+      }
+
+      @media (max-width: 320px) {
+        .employee-cards {
+          padding: 2px;
+        }
+
+        .employee-card {
+          padding: 8px;
+        }
+
+        .employee-name {
+          font-size: 14px;
+        }
+
+        .employee-title {
+          font-size: 12px;
+        }
+
+        .detail-value {
+          font-size: 12px;
+        }
+
+        .action-button {
+          font-size: 12px;
+          padding: 6px 10px;
         }
       }
     `;
@@ -344,6 +447,16 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
       default:
         return 'position-junior';
     }
+  }
+
+  _getLocalizedDepartment(department) {
+    const key = department?.toLowerCase();
+    return this.t(`departments.${key}`) || department;
+  }
+
+  _getLocalizedPosition(position) {
+    const key = position?.toLowerCase();
+    return this.t(`positions.${key}`) || position;
   }
 
   _handleEdit(employee) {
@@ -434,8 +547,9 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
                       ${employee.firstName} ${employee.lastName}
                     </h3>
                     <p class="employee-title">
-                      ${employee.position} ${this.t('common.in')}
-                      ${employee.department}
+                      ${this._getLocalizedPosition(employee.position)}
+                      ${this.t('common.in')}
+                      ${this._getLocalizedDepartment(employee.department)}
                     </p>
                     <div class="badges-container">
                       <span
@@ -443,14 +557,14 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
                           employee.department
                         )}"
                       >
-                        ${employee.department}
+                        ${this._getLocalizedDepartment(employee.department)}
                       </span>
                       <span
                         class="position-badge ${this._getPositionClass(
                           employee.position
                         )}"
                       >
-                        ${employee.position}
+                        ${this._getLocalizedPosition(employee.position)}
                       </span>
                     </div>
                   </div>
