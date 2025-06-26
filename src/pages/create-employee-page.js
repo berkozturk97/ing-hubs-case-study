@@ -1,10 +1,8 @@
 import {LitElement, html, css} from 'lit';
-import {connect} from 'pwa-helpers/connect-mixin.js';
-import {store} from '../store/index.js';
-
 import '../components/employee-form.js';
+import {ReduxLocalizedMixin} from '../localization/redux-localized-mixin.js';
 
-export class CreateEmployeePage extends connect(store)(LitElement) {
+export class CreateEmployeePage extends ReduxLocalizedMixin(LitElement) {
   static get properties() {
     return {
       loading: {type: Boolean},
@@ -19,6 +17,8 @@ export class CreateEmployeePage extends connect(store)(LitElement) {
   }
 
   stateChanged(state) {
+    super.stateChanged(state);
+
     this.loading = state.employees.loading;
     this.error = state.employees.error;
   }
@@ -51,7 +51,6 @@ export class CreateEmployeePage extends connect(store)(LitElement) {
         text-align: center;
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         :host {
           padding: 16px;
@@ -69,7 +68,6 @@ export class CreateEmployeePage extends connect(store)(LitElement) {
   }
 
   _showSuccessAndNavigate() {
-    //TODO: add toast notification
     setTimeout(() => {
       this._navigateToEmployeeList();
     }, 100);

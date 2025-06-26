@@ -10,6 +10,7 @@ export const SET_ERROR = 'SET_ERROR';
 export const CLEAR_ERROR = 'CLEAR_ERROR';
 export const SET_VIEW_MODE = 'SET_VIEW_MODE';
 export const SET_CURRENT_ROUTE = 'SET_CURRENT_ROUTE';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
 
 // Filter Actions
 export const SET_SEARCH_FILTER = 'SET_SEARCH_FILTER';

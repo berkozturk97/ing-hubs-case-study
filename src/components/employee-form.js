@@ -1,6 +1,4 @@
 import {LitElement, html, css} from 'lit';
-import {connect} from 'pwa-helpers/connect-mixin.js';
-import {t} from '../localization/index.js';
 import {store} from '../store/index.js';
 import {
   addEmployeeAsync,
@@ -10,8 +8,9 @@ import {toastService} from '../utils/toast-service.js';
 import './custom-button.js';
 import './loading-spinner.js';
 import './confirmation-modal.js';
+import {ReduxLocalizedMixin} from '../localization/redux-localized-mixin.js';
 
-export class EmployeeForm extends connect(store)(LitElement) {
+export class EmployeeForm extends ReduxLocalizedMixin(LitElement) {
   static get properties() {
     return {
       employee: {type: Object},
@@ -35,6 +34,8 @@ export class EmployeeForm extends connect(store)(LitElement) {
   }
 
   stateChanged(state) {
+    super.stateChanged(state);
+
     this.existingEmployees = state.employees.list || [];
     this.loading = state.employees.loading;
   }
@@ -193,7 +194,6 @@ export class EmployeeForm extends connect(store)(LitElement) {
         margin-top: 4px;
       }
 
-      /* Form validation feedback */
       .form-group.valid .form-input,
       .form-group.valid .form-select {
         border-color: #4caf50;
@@ -213,7 +213,6 @@ export class EmployeeForm extends connect(store)(LitElement) {
         position: relative;
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         .form-container {
           padding: 24px 20px;
@@ -254,21 +253,19 @@ export class EmployeeForm extends connect(store)(LitElement) {
       case 'firstName':
       case 'lastName':
         if (!value || value.trim().length < 2) {
-          errors[field] = t('validation.nameMinLength');
+          errors[field] = this.t('validation.nameMinLength');
         } else if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(value.trim())) {
-          errors[field] = t('validation.nameInvalidChars');
+          errors[field] = this.t('validation.nameInvalidChars');
         }
         break;
 
       case 'email':
         if (!value || !value.trim()) {
-          errors[field] = t('validation.emailRequired');
+          errors[field] = this.t('validation.emailRequired');
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
-          errors[field] = t('validation.emailInvalid');
+          errors[field] = this.t('validation.emailInvalid');
         } else {
-          // Check for email uniqueness
           const emailExists = this.existingEmployees.some((emp) => {
-            // In edit mode, allow the same email if it's the current employee's email
             if (
               this.isEditMode &&
               this.employee &&
@@ -283,47 +280,47 @@ export class EmployeeForm extends connect(store)(LitElement) {
           });
 
           if (emailExists) {
-            errors[field] = t('validation.emailExists');
+            errors[field] = this.t('validation.emailExists');
           }
         }
         break;
 
       case 'phone':
         if (!value || !value.trim()) {
-          errors[field] = t('validation.phoneRequired');
+          errors[field] = this.t('validation.phoneRequired');
         } else if (!/^\+?[\d\s\-()]{10,}$/.test(value.trim())) {
-          errors[field] = t('validation.phoneInvalid');
+          errors[field] = this.t('validation.phoneInvalid');
         }
         break;
 
       case 'dateOfEmployment':
         if (!value) {
-          errors[field] = t('validation.dateRequired');
+          errors[field] = this.t('validation.dateRequired');
         } else {
           const date = new Date(value);
 
           if (isNaN(date.getTime())) {
-            errors[field] = t('validation.dateInvalid');
+            errors[field] = this.t('validation.dateInvalid');
           }
         }
         break;
 
       case 'dateOfBirth':
         if (!value) {
-          errors[field] = t('validation.dateRequired');
+          errors[field] = this.t('validation.dateRequired');
         } else {
           const date = new Date(value);
           const today = new Date();
 
           if (isNaN(date.getTime())) {
-            errors[field] = t('validation.dateInvalid');
+            errors[field] = this.t('validation.dateInvalid');
           } else {
             const age = today.getFullYear() - date.getFullYear();
             if (age < 16 || age > 100) {
-              errors[field] = t('validation.ageInvalid');
+              errors[field] = this.t('validation.ageInvalid');
             }
             if (date > today) {
-              errors[field] = t('validation.dateBirthFuture');
+              errors[field] = this.t('validation.dateBirthFuture');
             }
           }
         }
@@ -332,7 +329,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
       case 'department':
       case 'position':
         if (!value || !value.trim()) {
-          errors[field] = t('validation.selectionRequired');
+          errors[field] = this.t('validation.selectionRequired');
         }
         break;
     }
@@ -378,10 +375,8 @@ export class EmployeeForm extends connect(store)(LitElement) {
     }
 
     if (this.isEditMode) {
-      // Show confirmation modal for updates
       this.showUpdateConfirmation = true;
     } else {
-      // Direct creation for new employees
       this._performCreateEmployee();
     }
   }
@@ -392,15 +387,14 @@ export class EmployeeForm extends connect(store)(LitElement) {
     store
       .dispatch(addEmployeeAsync(this.formData))
       .then(() => {
-        // Show success toast
         toastService.success(
-          t('toast.employeeCreated'),
+          this.t('toast.employeeCreated'),
           4000,
-          t('toast.employeeCreatedDesc')
+          this.t('toast.employeeCreatedDesc')
         );
 
         this.dispatchEvent(
-          new CustomEvent('employee-created', {
+          new CustomEvent(this.t('employee-created'), {
             detail: {employee: eventData},
             bubbles: true,
             composed: true,
@@ -410,7 +404,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
       .catch((error) => {
         console.error('Creation failed:', error);
         toastService.error(
-          t('toast.createError'),
+          this.t('toast.createError'),
           6000,
           error.message || 'An unexpected error occurred'
         );
@@ -424,13 +418,13 @@ export class EmployeeForm extends connect(store)(LitElement) {
       .dispatch(updateEmployeeAsync(this.employee.id, this.formData))
       .then(() => {
         toastService.success(
-          t('toast.employeeUpdated'),
+          this.t('toast.employeeUpdated'),
           4000,
-          t('toast.employeeUpdatedDesc')
+          this.t('toast.employeeUpdatedDesc')
         );
 
         this.dispatchEvent(
-          new CustomEvent('employee-updated', {
+          new CustomEvent(this.t('employee-updated'), {
             detail: {employee: eventData},
             bubbles: true,
             composed: true,
@@ -440,7 +434,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
       .catch((error) => {
         console.error('Update failed:', error);
         toastService.error(
-          t('toast.updateError'),
+          this.t('toast.updateError'),
           6000,
           error.message || 'An unexpected error occurred'
         );
@@ -458,7 +452,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
 
   _handleCancel() {
     this.dispatchEvent(
-      new CustomEvent('form-cancel', {
+      new CustomEvent(this.t('form-cancel'), {
         bubbles: true,
         composed: true,
       })
@@ -491,8 +485,8 @@ export class EmployeeForm extends connect(store)(LitElement) {
               overlay
               size="large"
               message="${this.isEditMode
-                ? t('common.updating')
-                : t('common.creating')}"
+                ? this.t('common.updating')
+                : this.t('common.creating')}"
             ></loading-spinner>
           `
         : ''}
@@ -501,13 +495,13 @@ export class EmployeeForm extends connect(store)(LitElement) {
         <div class="form-header">
           <h2 class="form-title">
             ${this.isEditMode
-              ? t('employeeForm.editTitle')
-              : t('employeeForm.createTitle')}
+              ? this.t('employeeForm.editTitle')
+              : this.t('employeeForm.createTitle')}
           </h2>
           <p class="form-subtitle">
             ${this.isEditMode
-              ? t('employeeForm.editSubtitle')
-              : t('employeeForm.createSubtitle')}
+              ? this.t('employeeForm.editSubtitle')
+              : this.t('employeeForm.createSubtitle')}
           </p>
         </div>
 
@@ -516,7 +510,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
           <div class="form-row">
             <div class="form-group ${this.errors.firstName ? 'error' : ''}">
               <label class="form-label required" for="firstName">
-                ${t('employeeForm.firstName')}
+                ${this.t('employeeForm.firstName')}
               </label>
               <input
                 type="text"
@@ -525,7 +519,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
                 class="form-input ${this.errors.firstName ? 'error' : ''}"
                 .value="${this.formData.firstName}"
                 @input="${this._handleInputChange}"
-                placeholder="${t('employeeForm.firstNamePlaceholder')}"
+                placeholder="${this.t('employeeForm.firstNamePlaceholder')}"
                 required
               />
               ${this.errors.firstName
@@ -537,7 +531,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
 
             <div class="form-group ${this.errors.lastName ? 'error' : ''}">
               <label class="form-label required" for="lastName">
-                ${t('employeeForm.lastName')}
+                ${this.t('employeeForm.lastName')}
               </label>
               <input
                 type="text"
@@ -546,7 +540,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
                 class="form-input ${this.errors.lastName ? 'error' : ''}"
                 .value="${this.formData.lastName}"
                 @input="${this._handleInputChange}"
-                placeholder="${t('employeeForm.lastNamePlaceholder')}"
+                placeholder="${this.t('employeeForm.lastNamePlaceholder')}"
                 required
               />
               ${this.errors.lastName
@@ -562,7 +556,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
             class="form-group full-width ${this.errors.email ? 'error' : ''}"
           >
             <label class="form-label required" for="email">
-              ${t('employeeForm.emailAddress')}
+              ${this.t('employeeForm.emailAddress')}
             </label>
             <input
               type="email"
@@ -571,7 +565,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
               class="form-input ${this.errors.email ? 'error' : ''}"
               .value="${this.formData.email}"
               @input="${this._handleInputChange}"
-              placeholder="${t('employeeForm.emailPlaceholder')}"
+              placeholder="${this.t('employeeForm.emailPlaceholder')}"
               required
             />
             ${this.errors.email
@@ -584,7 +578,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
             class="form-group full-width ${this.errors.phone ? 'error' : ''}"
           >
             <label class="form-label required" for="phone">
-              ${t('employeeForm.phoneNumber')}
+              ${this.t('employeeForm.phoneNumber')}
             </label>
             <input
               type="tel"
@@ -593,20 +587,20 @@ export class EmployeeForm extends connect(store)(LitElement) {
               class="form-input ${this.errors.phone ? 'error' : ''}"
               .value="${this.formData.phone}"
               @input="${this._handleInputChange}"
-              placeholder="${t('employeeForm.phonePlaceholder')}"
+              placeholder="${this.t('employeeForm.phonePlaceholder')}"
               required
             />
             ${this.errors.phone
               ? html` <div class="error-message">⚠️ ${this.errors.phone}</div> `
               : ''}
-            <div class="help-text">${t('employeeForm.phoneHelp')}</div>
+            <div class="help-text">${this.t('employeeForm.phoneHelp')}</div>
           </div>
 
           <!-- Dates Row -->
           <div class="form-row">
             <div class="form-group ${this.errors.dateOfBirth ? 'error' : ''}">
               <label class="form-label required" for="dateOfBirth">
-                ${t('employeeForm.dateOfBirth')}
+                ${this.t('employeeForm.dateOfBirth')}
               </label>
               <input
                 type="date"
@@ -630,7 +624,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
               class="form-group ${this.errors.dateOfEmployment ? 'error' : ''}"
             >
               <label class="form-label required" for="dateOfEmployment">
-                ${t('employeeForm.dateOfEmployment')}
+                ${this.t('employeeForm.dateOfEmployment')}
               </label>
               <input
                 type="date"
@@ -657,7 +651,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
           <div class="form-row">
             <div class="form-group ${this.errors.department ? 'error' : ''}">
               <label class="form-label required" for="department">
-                ${t('employeeForm.department')}
+                ${this.t('employeeForm.department')}
               </label>
               <select
                 id="department"
@@ -667,9 +661,13 @@ export class EmployeeForm extends connect(store)(LitElement) {
                 @change="${this._handleInputChange}"
                 required
               >
-                <option value="">${t('employeeForm.selectDepartment')}</option>
-                <option value="Analytics">Analytics</option>
-                <option value="Tech">Tech</option>
+                <option value="">
+                  ${this.t('employeeForm.selectDepartment')}
+                </option>
+                <option value="Analytics">
+                  ${this.t('departments.analytics')}
+                </option>
+                <option value="Tech">${this.t('departments.tech')}</option>
               </select>
               ${this.errors.department
                 ? html`
@@ -682,7 +680,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
 
             <div class="form-group ${this.errors.position ? 'error' : ''}">
               <label class="form-label required" for="position">
-                ${t('employeeForm.position')}
+                ${this.t('employeeForm.position')}
               </label>
               <select
                 id="position"
@@ -692,10 +690,12 @@ export class EmployeeForm extends connect(store)(LitElement) {
                 @change="${this._handleInputChange}"
                 required
               >
-                <option value="">${t('employeeForm.selectPosition')}</option>
-                <option value="Junior">Junior</option>
-                <option value="Medior">Medior</option>
-                <option value="Senior">Senior</option>
+                <option value="">
+                  ${this.t('employeeForm.selectPosition')}
+                </option>
+                <option value="Junior">${this.t('positions.junior')}</option>
+                <option value="Medior">${this.t('positions.medior')}</option>
+                <option value="Senior">${this.t('positions.senior')}</option>
               </select>
               ${this.errors.position
                 ? html`
@@ -712,7 +712,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
             type="button"
             @button-click="${this._handleCancel}"
           >
-            ${t('common.cancel')}
+            ${this.t('common.cancel')}
           </custom-button>
 
           <custom-button
@@ -720,7 +720,7 @@ export class EmployeeForm extends connect(store)(LitElement) {
             type="button"
             @button-click="${this._handleReset}"
           >
-            ${t('common.reset')}
+            ${this.t('common.reset')}
           </custom-button>
 
           <custom-button
@@ -728,7 +728,9 @@ export class EmployeeForm extends connect(store)(LitElement) {
             type="submit"
             ?loading="${this.loading}"
           >
-            ${this.isEditMode ? t('common.update') : t('common.create')}
+            ${this.isEditMode
+              ? this.t('common.update')
+              : this.t('common.create')}
           </custom-button>
         </div>
       </form>
@@ -736,11 +738,11 @@ export class EmployeeForm extends connect(store)(LitElement) {
       <!-- Update Confirmation Modal -->
       <confirmation-modal
         ?open="${this.showUpdateConfirmation}"
-        title="${t('employeeForm.updateConfirmation.title')}"
-        message="${t('employeeForm.updateConfirmation.message')}"
-        warningText="${t('employeeForm.updateConfirmation.warning')}"
-        confirmButtonText="${t('common.update')}"
-        cancelButtonText="${t('common.cancel')}"
+        title="${this.t('employeeForm.updateConfirmation.title')}"
+        message="${this.t('employeeForm.updateConfirmation.message')}"
+        warningText="${this.t('employeeForm.updateConfirmation.warning')}"
+        confirmButtonText="${this.t('common.update')}"
+        cancelButtonText="${this.t('common.cancel')}"
         confirmButtonVariant="primary"
         ?loading="${this.loading}"
         .data="${this.employee

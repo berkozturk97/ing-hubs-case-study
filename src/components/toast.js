@@ -168,7 +168,6 @@ export class Toast extends LitElement {
         }
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         :host {
           top: 10px;

@@ -92,7 +92,6 @@ export class LoadingSpinner extends LitElement {
         }
       }
 
-      /* Pulsing animation for overlay */
       :host([overlay]) .spinner-container {
         animation: pulse 2s ease-in-out infinite;
       }

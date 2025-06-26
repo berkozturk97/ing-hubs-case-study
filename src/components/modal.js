@@ -169,7 +169,6 @@ export class Modal extends LitElement {
         z-index: 1;
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         :host([open]) {
           padding: 16px;

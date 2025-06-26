@@ -204,7 +204,6 @@ export class CustomButton extends LitElement {
         font-size: 1.2em;
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         .button.large {
           padding: 12px 24px;

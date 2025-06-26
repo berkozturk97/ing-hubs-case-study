@@ -7,6 +7,7 @@ import {
   CLEAR_FILTERS,
   SET_CURRENT_PAGE,
   SET_ITEMS_PER_PAGE,
+  SET_LANGUAGE,
 } from './types.js';
 
 export const setViewMode = (mode) => ({
@@ -46,4 +47,9 @@ export const setCurrentPage = (page) => ({
 export const setItemsPerPage = (itemsPerPage) => ({
   type: SET_ITEMS_PER_PAGE,
   payload: itemsPerPage,
+});
+
+export const setLanguage = (language) => ({
+  type: SET_LANGUAGE,
+  payload: language,
 });

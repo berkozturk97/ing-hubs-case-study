@@ -7,7 +7,8 @@
 import {LitElement, html, css} from 'lit';
 import './src/components/navigation-bar.js';
 import './src/components/toast-manager.js';
-import {localizationService} from './src/localization/index.js';
+
+import './src/localization/redux-localization.js';
 import {AppRouter} from './src/utils/router.js';
 import {connect} from 'pwa-helpers/connect-mixin.js';
 import {store} from './src/store/index.js';
@@ -100,7 +101,6 @@ export class App extends connect(store)(LitElement) {
         letter-spacing: 1px;
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         .main-content {
           padding: 16px;
@@ -128,23 +128,13 @@ export class App extends connect(store)(LitElement) {
   static get properties() {
     return {
       currentRoute: {type: String},
-      language: {type: String},
     };
   }
 
   constructor() {
     super();
     this.currentRoute = 'employees';
-    this.language = localizationService.getCurrentLanguage();
 
-    // Subscribe to language changes
-    this._unsubscribeLocalization = localizationService.subscribe(
-      (newLanguage) => {
-        this.language = newLanguage;
-      }
-    );
-
-    // Initialize sample data if no employees exist
     setTimeout(() => {
       const state = store.getState();
       if (!state.employees.list || state.employees.list.length === 0) {
@@ -154,7 +144,6 @@ export class App extends connect(store)(LitElement) {
   }
 
   firstUpdated() {
-    // Initialize toast service
     const toastManager = this.shadowRoot.querySelector('toast-manager');
     if (toastManager) {
       toastService.init(toastManager);
@@ -174,21 +163,12 @@ export class App extends connect(store)(LitElement) {
     }, 50);
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    if (this._unsubscribeLocalization) {
-      this._unsubscribeLocalization();
-    }
-  }
-
   render() {
     return html`
       <div class="app-container">
         <navigation-bar
           .activeRoute="${this.currentRoute}"
-          .language="${this.language}"
           @navigation-change="${this._handleNavigationChange}"
-          @language-change="${this._handleLanguageChange}"
         >
         </navigation-bar>
 
@@ -217,12 +197,6 @@ export class App extends connect(store)(LitElement) {
       const path = route === 'employees' ? '/employees' : `/${route}`;
       this.router.navigate(path);
     }
-  }
-
-  _handleLanguageChange(event) {
-    this.language = event.detail.language;
-    // Update document language attribute for localization
-    document.documentElement.lang = this.language;
   }
 
   _createSampleEmployees() {

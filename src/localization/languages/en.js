@@ -101,6 +101,9 @@ export const en = {
     updating: 'Updating employee...',
     processing: 'Processing...',
     deleting: 'Deleting employee...',
+    table: 'Table',
+    list: 'List',
+    actions: 'Actions',
   },
 
   deleteModal: {
@@ -109,6 +112,14 @@ export const en = {
     warning: 'This action cannot be undone.',
     confirmButton: 'Delete Employee',
     cancelButton: 'Cancel',
+  },
+
+  pagination: {
+    showing: 'Showing {{start}} to {{end}} of {{total}} entries',
+    prev: 'Prev',
+    next: 'Next',
+    show: 'Show',
+    perPage: 'per page',
   },
 
   toast: {

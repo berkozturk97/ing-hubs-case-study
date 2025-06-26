@@ -1,7 +1,8 @@
 import {LitElement, html, css} from 'lit';
-import {localizationService, t} from '../localization/index.js';
+import {ReduxLocalizedMixin} from '../localization/redux-localized-mixin.js';
+import {changeLanguage} from '../localization/redux-localization.js';
 
-export class NavigationBar extends LitElement {
+export class NavigationBar extends ReduxLocalizedMixin(LitElement) {
   static get styles() {
     return css`
       :host {
@@ -95,7 +96,6 @@ export class NavigationBar extends LitElement {
         background-color: #ff6200;
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         .nav-container {
           padding: 0 16px;
@@ -132,28 +132,12 @@ export class NavigationBar extends LitElement {
   static get properties() {
     return {
       activeRoute: {type: String},
-      language: {type: String},
     };
   }
 
   constructor() {
     super();
     this.activeRoute = 'employees';
-    this.language = localizationService.getCurrentLanguage();
-
-    // Subscribe to language changes
-    this._unsubscribeLocalization = localizationService.subscribe(
-      (newLanguage) => {
-        this.language = newLanguage;
-      }
-    );
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    if (this._unsubscribeLocalization) {
-      this._unsubscribeLocalization();
-    }
   }
 
   render() {
@@ -175,7 +159,7 @@ export class NavigationBar extends LitElement {
                 href="/employees"
                 @click="${this._handleNavigation}"
               >
-                ${t('navigation.employees')}
+                ${this.t('navigation.employees')}
               </a>
             </li>
             <li class="nav-item">
@@ -186,7 +170,7 @@ export class NavigationBar extends LitElement {
                 href="/add-employee"
                 @click="${this._handleNavigation}"
               >
-                ${t('navigation.addNew')}
+                ${this.t('navigation.addNew')}
               </a>
             </li>
           </ul>
@@ -194,8 +178,12 @@ export class NavigationBar extends LitElement {
             class="language-selector"
             @change="${this._handleLanguageChange}"
           >
-            <option value="en" ?selected="${this.language === 'en'}">🇬🇧</option>
-            <option value="tr" ?selected="${this.language === 'tr'}">🇹🇷</option>
+            <option value="en" ?selected="${this._currentLanguage === 'en'}">
+              🇬🇧
+            </option>
+            <option value="tr" ?selected="${this._currentLanguage === 'tr'}">
+              🇹🇷
+            </option>
           </select>
         </div>
       </nav>
@@ -219,14 +207,7 @@ export class NavigationBar extends LitElement {
 
   _handleLanguageChange(event) {
     const newLanguage = event.target.value;
-    localizationService.setLanguage(newLanguage);
-    this.dispatchEvent(
-      new CustomEvent('language-change', {
-        detail: {language: newLanguage},
-        bubbles: true,
-        composed: true,
-      })
-    );
+    changeLanguage(newLanguage);
   }
 }
 

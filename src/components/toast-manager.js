@@ -31,7 +31,6 @@ export class ToastManager extends LitElement {
         pointer-events: auto;
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         :host {
           top: 10px;

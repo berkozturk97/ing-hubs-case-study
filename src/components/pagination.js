@@ -1,6 +1,7 @@
 import {LitElement, html, css} from 'lit';
+import {ReduxLocalizedMixin} from '../localization/redux-localized-mixin.js';
 
-export class Pagination extends LitElement {
+export class Pagination extends ReduxLocalizedMixin(LitElement) {
   static get properties() {
     return {
       currentPage: {type: Number},
@@ -120,7 +121,6 @@ export class Pagination extends LitElement {
         box-shadow: 0 0 0 2px rgba(255, 98, 0, 0.2);
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         .pagination-container {
           flex-direction: column;
@@ -246,8 +246,11 @@ export class Pagination extends LitElement {
     return html`
       <div class="pagination-container">
         <div class="pagination-info">
-          Showing ${this.startItem} to ${this.endItem} of ${this.totalItems}
-          entries
+          ${this.t('pagination.showing', {
+            start: this.startItem,
+            end: this.endItem,
+            total: this.totalItems,
+          })}
         </div>
 
         <div class="pagination-controls">
@@ -256,7 +259,7 @@ export class Pagination extends LitElement {
             @click="${() => this._handlePageChange(this.currentPage - 1)}"
             ?disabled="${this.currentPage === 1}"
           >
-            ← Prev
+            ← ${this.t('pagination.prev')}
           </button>
 
           ${visiblePages[0] > 1 ? this._renderPageButton(1) : ''}
@@ -276,12 +279,12 @@ export class Pagination extends LitElement {
             @click="${() => this._handlePageChange(this.currentPage + 1)}"
             ?disabled="${this.currentPage === totalPages}"
           >
-            Next →
+            ${this.t('pagination.next')} →
           </button>
         </div>
 
         <div class="items-per-page">
-          <label for="items-per-page">Show:</label>
+          <label for="items-per-page">${this.t('pagination.show')}:</label>
           <select
             id="items-per-page"
             .value="${this.itemsPerPage}"
@@ -293,7 +296,7 @@ export class Pagination extends LitElement {
             <option value="50">50</option>
             <option value="100">100</option>
           </select>
-          <span>per page</span>
+          <span>${this.t('pagination.perPage')}</span>
         </div>
       </div>
     `;

@@ -1,7 +1,6 @@
 import {LitElement, html, css} from 'lit';
-import {connect} from 'pwa-helpers/connect-mixin.js';
+import {ReduxLocalizedMixin} from '../localization/redux-localized-mixin.js';
 import {store} from '../store/index.js';
-import {t} from '../localization/index.js';
 import {
   setViewMode,
   setCurrentPage,
@@ -12,7 +11,7 @@ import {toastService} from '../utils/toast-service.js';
 import '../components/loading-spinner.js';
 import '../components/employee-table.js';
 
-export class ListEmployeePage extends connect(store)(LitElement) {
+export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
   static get properties() {
     return {
       employees: {type: Array},
@@ -33,6 +32,8 @@ export class ListEmployeePage extends connect(store)(LitElement) {
   }
 
   stateChanged(state) {
+    super.stateChanged(state);
+
     this.employees = state.employees.list || [];
     this.loading = state.employees.loading || false;
     this.viewMode = state.ui.viewMode || 'table';
@@ -126,7 +127,6 @@ export class ListEmployeePage extends connect(store)(LitElement) {
         margin-bottom: 16px;
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         :host {
           padding: 16px;
@@ -164,11 +164,10 @@ export class ListEmployeePage extends connect(store)(LitElement) {
     store
       .dispatch(deleteEmployeeAsync(employee.id))
       .then(() => {
-        // Show success toast
         toastService.success(
-          t('toast.employeeDeleted'),
+          this.t('toast.employeeDeleted'),
           4000,
-          t('toast.employeeDeletedDesc')
+          this.t('toast.employeeDeletedDesc')
         );
 
         const table = this.shadowRoot.querySelector('employee-table');
@@ -180,7 +179,7 @@ export class ListEmployeePage extends connect(store)(LitElement) {
         console.error('Delete failed:', error);
 
         toastService.error(
-          t('toast.deleteError'),
+          this.t('toast.deleteError'),
           6000,
           error.message || 'An unexpected error occurred'
         );
@@ -195,20 +194,20 @@ export class ListEmployeePage extends connect(store)(LitElement) {
   render() {
     return html`
       <div class="page-header">
-        <h1 class="page-title">${t('navigation.employees')}</h1>
+        <h1 class="page-title">${this.t('navigation.employees')}</h1>
         <div class="view-controls">
           <div class="view-toggle">
             <button
               class="view-button ${this.viewMode === 'table' ? 'active' : ''}"
               @click="${() => this._handleViewModeChange('table')}"
             >
-              📊 Table
+              📊 ${this.t('common.table')}
             </button>
             <button
               class="view-button ${this.viewMode === 'list' ? 'active' : ''}"
               @click="${() => this._handleViewModeChange('list')}"
             >
-              📋 List
+              📋 ${this.t('common.list')}
             </button>
           </div>
         </div>
@@ -220,7 +219,7 @@ export class ListEmployeePage extends connect(store)(LitElement) {
               <loading-spinner
                 overlay
                 size="large"
-                message="${t('common.deleting')}"
+                message="${this.t('common.deleting')}"
               ></loading-spinner>
             `
           : this.employees.length === 0

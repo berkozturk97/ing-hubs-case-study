@@ -1,9 +1,9 @@
 import {LitElement, html, css} from 'lit';
-import {t} from '../localization/index.js';
+import {ReduxLocalizedMixin} from '../localization/redux-localized-mixin.js';
 import './pagination.js';
 import './confirmation-modal.js';
 
-export class EmployeeTable extends LitElement {
+export class EmployeeTable extends ReduxLocalizedMixin(LitElement) {
   static get properties() {
     return {
       employees: {type: Array},
@@ -234,7 +234,6 @@ export class EmployeeTable extends LitElement {
         }
       }
 
-      /* Hide less important columns on smaller screens */
       @media (max-width: 1024px) {
         .hide-mobile {
           display: none;
@@ -245,7 +244,6 @@ export class EmployeeTable extends LitElement {
         }
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         .table-header th,
         .table-cell {
@@ -408,15 +406,15 @@ export class EmployeeTable extends LitElement {
         <table class="table">
           <thead class="table-header">
             <tr>
-              <th>${t('employeeForm.firstName')}</th>
-              <th>${t('employeeForm.lastName')}</th>
-              <th>${t('employeeForm.dateOfEmployment')}</th>
-              <th class="hide-mobile">${t('employeeForm.dateOfBirth')}</th>
-              <th class="hide-mobile">${t('employeeForm.phoneNumber')}</th>
-              <th>${t('employeeForm.emailAddress')}</th>
-              <th>${t('employeeForm.department')}</th>
-              <th>${t('employeeForm.position')}</th>
-              <th>Actions</th>
+              <th>${this.t('employeeForm.firstName')}</th>
+              <th>${this.t('employeeForm.lastName')}</th>
+              <th>${this.t('employeeForm.dateOfEmployment')}</th>
+              <th class="hide-mobile">${this.t('employeeForm.dateOfBirth')}</th>
+              <th class="hide-mobile">${this.t('employeeForm.phoneNumber')}</th>
+              <th>${this.t('employeeForm.emailAddress')}</th>
+              <th>${this.t('employeeForm.department')}</th>
+              <th>${this.t('employeeForm.position')}</th>
+              <th>${this.t('common.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -514,11 +512,11 @@ export class EmployeeTable extends LitElement {
 
       <confirmation-modal
         ?open="${this.deleteModalOpen}"
-        title="${t('deleteModal.title')}"
-        message="${t('deleteModal.message')}"
-        warningText="${t('deleteModal.warning')}"
-        confirmButtonText="${t('deleteModal.confirmButton')}"
-        cancelButtonText="${t('deleteModal.cancelButton')}"
+        title="${this.t('deleteModal.title')}"
+        message="${this.t('deleteModal.message')}"
+        warningText="${this.t('deleteModal.warning')}"
+        confirmButtonText="${this.t('deleteModal.confirmButton')}"
+        cancelButtonText="${this.t('deleteModal.cancelButton')}"
         confirmButtonVariant="danger"
         ?loading="${this.deleteLoading}"
         .data="${this.employeeToDelete

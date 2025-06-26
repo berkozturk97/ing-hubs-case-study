@@ -101,6 +101,9 @@ export const tr = {
     updating: 'Çalışan güncelleniyor...',
     processing: 'İşleniyor...',
     deleting: 'Çalışan siliniyor...',
+    table: 'Tablo',
+    list: 'Liste',
+    actions: 'İşlemler',
   },
 
   deleteModal: {
@@ -109,6 +112,14 @@ export const tr = {
     warning: 'Bu işlem geri alınamaz.',
     confirmButton: 'Çalışanı Sil',
     cancelButton: 'İptal',
+  },
+
+  pagination: {
+    showing: '{{total}} kayıttan {{start}} - {{end}} arası gösteriliyor',
+    prev: 'Önceki',
+    next: 'Sonraki',
+    show: 'Göster',
+    perPage: 'sayfa başına',
   },
 
   toast: {

@@ -7,11 +7,13 @@ import {
   CLEAR_FILTERS,
   SET_CURRENT_PAGE,
   SET_ITEMS_PER_PAGE,
+  SET_LANGUAGE,
 } from '../actions/types.js';
 
 const initialState = {
   viewMode: 'table', // 'list' or 'table'
   currentRoute: 'employees',
+  language: 'en', // Default language
   filters: {
     search: '',
     department: '',
@@ -107,6 +109,12 @@ export const uiReducer = (state = initialState, action) => {
           itemsPerPage: action.payload,
           currentPage: 1, // Reset to first page when changing items per page
         },
+      };
+
+    case SET_LANGUAGE:
+      return {
+        ...state,
+        language: action.payload,
       };
 
     default:

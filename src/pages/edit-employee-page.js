@@ -1,10 +1,8 @@
 import {LitElement, html, css} from 'lit';
-import {connect} from 'pwa-helpers/connect-mixin.js';
-import {store} from '../store/index.js';
-
 import '../components/employee-form.js';
+import {ReduxLocalizedMixin} from '../localization/redux-localized-mixin.js';
 
-export class EditEmployeePage extends connect(store)(LitElement) {
+export class EditEmployeePage extends ReduxLocalizedMixin(LitElement) {
   static get properties() {
     return {
       employeeId: {type: String},
@@ -23,6 +21,8 @@ export class EditEmployeePage extends connect(store)(LitElement) {
   }
 
   stateChanged(state) {
+    super.stateChanged(state);
+
     this.loading = state.employees.loading;
     this.error = state.employees.error;
 
@@ -101,7 +101,6 @@ export class EditEmployeePage extends connect(store)(LitElement) {
         transform: translateX(-2px);
       }
 
-      /* Mobile responsive */
       @media (max-width: 768px) {
         :host {
           padding: 16px;
@@ -116,18 +115,15 @@ export class EditEmployeePage extends connect(store)(LitElement) {
 
   connectedCallback() {
     super.connectedCallback();
-    // Vaadin Router will set the location property
     this._extractEmployeeIdFromLocation();
   }
 
   onBeforeEnter(location) {
-    // Called by Vaadin Router before entering the route
     this.employeeId = location.params.id;
     return true;
   }
 
   _extractEmployeeIdFromLocation() {
-    // Fallback method to extract ID from URL if not set by router
     if (!this.employeeId) {
       const path = window.location.pathname;
       const matches = path.match(/\/edit-employee\/(.+)/);
@@ -138,7 +134,6 @@ export class EditEmployeePage extends connect(store)(LitElement) {
   }
 
   _handleEmployeeUpdate() {
-    // Employee was updated successfully
     this._showSuccessAndNavigate();
   }
 
@@ -147,7 +142,6 @@ export class EditEmployeePage extends connect(store)(LitElement) {
   }
 
   _showSuccessAndNavigate() {
-    // TODO: Show toast notification
     setTimeout(() => {
       this._navigateToEmployeeList();
     }, 100);
