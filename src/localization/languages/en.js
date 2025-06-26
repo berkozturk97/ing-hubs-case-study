@@ -79,6 +79,13 @@ export const en = {
     emailExists: 'This email address is already in use',
   },
 
+  employee: {
+    email: 'Email',
+    phone: 'Phone',
+    dateOfEmployment: 'Date of Employment',
+    dateOfBirth: 'Date of Birth',
+  },
+
   common: {
     yes: 'Yes',
     no: 'No',
@@ -104,6 +111,14 @@ export const en = {
     table: 'Table',
     list: 'List',
     actions: 'Actions',
+    in: 'in',
+    noEmployees: 'No employees found',
+    addFirstEmployee: 'Start by adding your first employee.',
+  },
+
+  modal: {
+    confirmDelete: 'Delete Employee',
+    deleteEmployeeConfirm: 'Are you sure you want to delete {{name}}?',
   },
 
   deleteModal: {

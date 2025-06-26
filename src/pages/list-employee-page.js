@@ -10,6 +10,7 @@ import {deleteEmployeeAsync} from '../store/actions/employees.js';
 import {toastService} from '../utils/toast-service.js';
 import '../components/loading-spinner.js';
 import '../components/employee-table.js';
+import '../components/employee-list.js';
 
 export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
   static get properties() {
@@ -171,8 +172,12 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
         );
 
         const table = this.shadowRoot.querySelector('employee-table');
+        const list = this.shadowRoot.querySelector('employee-list');
         if (table) {
           table.closeDeleteModal();
+        }
+        if (list) {
+          list.closeDeleteModal();
         }
       })
       .catch((error) => {
@@ -185,8 +190,12 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
         );
 
         const table = this.shadowRoot.querySelector('employee-table');
+        const list = this.shadowRoot.querySelector('employee-list');
         if (table) {
           table.closeDeleteModal();
+        }
+        if (list) {
+          list.closeDeleteModal();
         }
       });
   }
@@ -243,10 +252,15 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
               ></employee-table>
             `
           : html`
-              <div style="padding: 20px;">
-                <p>List view coming soon...</p>
-                <!-- TODO: Implement list view component -->
-              </div>
+              <employee-list
+                .employees="${this.employees}"
+                .loading="${this.loading}"
+                .currentPage="${this.currentPage}"
+                .itemsPerPage="${this.itemsPerPage}"
+                @page-change="${this._handlePageChange}"
+                @items-per-page-change="${this._handleItemsPerPageChange}"
+                @employee-delete="${this._handleEmployeeDelete}"
+              ></employee-list>
             `}
       </div>
     `;

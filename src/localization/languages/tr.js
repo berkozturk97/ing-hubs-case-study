@@ -79,6 +79,13 @@ export const tr = {
     emailExists: 'Bu e-posta adresi zaten kullanılıyor',
   },
 
+  employee: {
+    email: 'E-posta',
+    phone: 'Telefon',
+    dateOfEmployment: 'İşe Başlama Tarihi',
+    dateOfBirth: 'Doğum Tarihi',
+  },
+
   common: {
     yes: 'Evet',
     no: 'Hayır',
@@ -104,6 +111,15 @@ export const tr = {
     table: 'Tablo',
     list: 'Liste',
     actions: 'İşlemler',
+    in: 'içinde',
+    noEmployees: 'Çalışan bulunamadı',
+    addFirstEmployee: 'İlk çalışanınızı ekleyerek başlayın.',
+  },
+
+  modal: {
+    confirmDelete: 'Çalışanı Sil',
+    deleteEmployeeConfirm:
+      '{{name}} adlı çalışanı silmek istediğinizden emin misiniz?',
   },
 
   deleteModal: {
