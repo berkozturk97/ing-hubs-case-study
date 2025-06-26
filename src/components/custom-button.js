@@ -7,7 +7,7 @@ export class CustomButton extends LitElement {
       size: {type: String}, // 'small', 'medium', 'large'
       disabled: {type: Boolean},
       loading: {type: Boolean},
-      fullWidth: {type: Boolean},
+      fullWidth: {type: Boolean, reflect: true, attribute: 'full-width'},
       type: {type: String}, // 'button', 'submit', 'reset'
     };
   }
@@ -193,7 +193,6 @@ export class CustomButton extends LitElement {
         }
       }
 
-      /* Icon support */
       .button-content {
         display: flex;
         align-items: center;
