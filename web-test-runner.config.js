@@ -126,6 +126,12 @@ export default {
             test: "!('attachShadow' in Element.prototype) || !('getRootNode' in Element.prototype) || window.ShadyDOM && window.ShadyDOM.force",
             module: false,
           },
+          {
+            name: 'process-polyfill',
+            code: 'window.global = window.global || window; window.global.process = window.global.process || {env: {NODE_ENV: "test"}}; window.process = window.global.process;',
+            test: "typeof global === 'undefined' || typeof process === 'undefined'",
+            module: false,
+          },
         ],
       },
     }),
