@@ -10,9 +10,9 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 
 export default {
-  input: 'my-element.js',
+  input: 'index.js',
   output: {
-    file: 'my-element.bundled.js',
+    file: 'index.bundled.js',
     format: 'esm',
   },
   onwarn(warning) {
@@ -21,7 +21,11 @@ export default {
     }
   },
   plugins: [
-    replace({preventAssignment: false, 'Reflect.decorate': 'undefined'}),
+    replace({
+      preventAssignment: false,
+      'Reflect.decorate': 'undefined',
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
     resolve(),
     /**
      * This minification setup serves the static site generation.
