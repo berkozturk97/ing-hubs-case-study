@@ -74,47 +74,47 @@ ING Hubs Case Study is a comprehensive **LitElement Web Components application**
 
 ```
 src/
-├── 📁 components/          # Reusable UI components
-│   ├── 🎨 modal.js         # Portal-based modal system
-│   ├── 📝 employee-form.js # Employee creation/editing forms
-│   ├── 📊 employee-table.js # Sortable, responsive data table
-│   ├── 📋 employee-list.js # Card-based list view
-│   ├── 🔍 search-bar.js    # Real-time search component
-│   ├── 📄 pagination.js    # Advanced pagination controls
-│   ├── 🍞 toast.js         # Notification toast component
-│   ├── ⏳ loading-spinner.js # Loading state indicators
-│   ├── 🔘 custom-button.js # Themed button component
-│   └── 🚪 navigation-bar.js # App navigation header
-├── 📁 pages/               # Page-level components
-│   ├── 📋 list-employee-page.js # Employee listing interface
-│   ├── ➕ create-employee-page.js # Employee creation page
-│   └── ✏️ edit-employee-page.js # Employee editing interface
-├── 📁 store/               # Redux store configuration
-│   ├── 🏪 index.js         # Store setup with middleware
-│   ├── 📁 actions/         # Redux action creators
-│   │   ├── 👥 employees.js # Employee-related actions
-│   │   ├── 🎨 ui.js        # UI state actions
-│   │   └── 🏷️ types.js     # Action type constants
-│   ├── 📁 reducers/        # Redux reducers
-│   │   ├── 👥 employees.js # Employee state management
-│   │   ├── 🎨 ui.js        # UI state management
-│   │   └── 📋 index.js     # Root reducer combination
-│   └── 📁 middleware/      # Custom Redux middleware
-│       └── 💾 localStorage.js # Local storage persistence
-├── 📁 localization/        # Internationalization
-│   ├── 🌍 index.js         # Localization setup
-│   ├── 🔧 localization-service.js # Language management
-│   ├── 🔗 redux-localization.js # Redux localization integration
-│   ├── 🎭 redux-localized-mixin.js # Localization mixin for components
-│   └── 📁 languages/       # Language files
-│       ├── 🇺🇸 en.js       # English translations
-│       └── 🇹🇷 tr.js       # Turkish translations
-├── 📁 utils/               # Utility functions
-│   ├── 🛤️ router.js        # Routing configuration
-│   └── 🍞 toast-service.js # Toast notification service
-└── 📁 assets/              # Static assets
-    └── 📁 svgs/            # SVG icons and graphics
-        └── 🏢 logo.svg     # Application logo
+├── 📁 components/          
+│   ├── 🎨 modal.js         
+│   ├── 📝 employee-form.js 
+│   ├── 📊 employee-table.js 
+│   ├── 📋 employee-list.js 
+│   ├── 🔍 search-bar.js   
+│   ├── 📄 pagination.js    
+│   ├── 🍞 toast.js         
+│   ├── ⏳ loading-spinner.js
+│   ├── 🔘 custom-button.js
+│   └── 🚪 navigation-bar.js 
+├── 📁 pages/               
+│   ├── 📋 list-employee-page.js 
+│   ├── ➕ create-employee-page.js 
+│   └── ✏️ edit-employee-page.js
+├── 📁 store/               
+│   ├── 🏪 index.js         
+│   ├── 📁 actions/         
+│   │   ├── 👥 employees.js 
+│   │   ├── 🎨 ui.js        
+│   │   └── 🏷️ types.js     
+│   ├── 📁 reducers/        
+│   │   ├── 👥 employees.js 
+│   │   ├── 🎨 ui.js        
+│   │   └── 📋 index.js     
+│   └── 📁 middleware/      
+│       └── 💾 localStorage.js 
+├── 📁 localization/       
+│   ├── 🌍 index.js         
+│   ├── 🔧 localization-service.js 
+│   ├── 🔗 redux-localization.js 
+│   ├── 🎭 redux-localized-mixin.js 
+│   └── 📁 languages/       
+│       ├── 🇺🇸 en.js       
+│       └── 🇹🇷 tr.js       
+├── 📁 utils/               
+│   ├── 🛤️ router.js        
+│   └── 🍞 toast-service.js 
+└── 📁 assets/              
+    └── 📁 svgs/            
+        └── 🏢 logo.svg     
 ```
 
 ---
