@@ -174,14 +174,6 @@ export class EditEmployeePage extends ReduxLocalizedMixin(LitElement) {
         ← Back to Employee List
       </a>
 
-      <div class="page-header">
-        <h1 class="page-title">Edit Employee</h1>
-        <p class="page-subtitle">
-          Update information for ${this.employee.firstName}
-          ${this.employee.lastName}
-        </p>
-      </div>
-
       ${this.error
         ? html`
             <div class="error-banner">
