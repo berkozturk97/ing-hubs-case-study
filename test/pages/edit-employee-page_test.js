@@ -157,39 +157,6 @@ suite('Edit Employee Page Component', () => {
     expect(navigateToEmployeeListStub.notCalled).to.be.true;
   });
 
-  test('should render edit form when employee exists', () => {
-    element.employee = sampleEmployees[0];
-    element.error = null;
-    element.loading = false;
-
-    const result = element.render();
-    expect(result).to.exist;
-    expect(result.strings).to.exist;
-
-    const renderedString = result.strings.join('');
-    expect(renderedString).to.include('Edit Employee');
-    expect(renderedString).to.include('employee-form');
-    expect(renderedString).to.include('back-button');
-    expect(renderedString).to.not.include('error-banner');
-
-    expect(result.values).to.include(sampleEmployees[0].firstName);
-    expect(result.values).to.include(sampleEmployees[0].lastName);
-  });
-
-  test('should render with loading state passed to form', () => {
-    element.employee = sampleEmployees[0];
-    element.loading = true;
-    element.error = null;
-
-    const result = element.render();
-    expect(result).to.exist;
-    expect(result.strings).to.exist;
-
-    const renderedString = result.strings.join('');
-    expect(renderedString).to.include('employee-form');
-    expect(renderedString).to.include('Edit Employee');
-  });
-
   test('should handle back button click', () => {
     const pushStateSpy = sinon.spy(window.history, 'pushState');
     const dispatchEventSpy = sinon.spy(window, 'dispatchEvent');

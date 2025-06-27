@@ -96,7 +96,7 @@ suite('Localization Service', () => {
 
   test('should get text with placeholders', () => {
     const text = localizationService.getTextWithPlaceholders('common.edit', {
-      name: 'John',
+      name: 'Berk',
     });
 
     expect(text).to.be.a('string');

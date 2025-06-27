@@ -128,7 +128,7 @@ export class EmployeeTable extends ReduxLocalizedMixin(LitElement) {
         border-radius: 12px;
         font-size: 12px;
         font-weight: 500;
-        text-transform: uppercase;
+        text-transform: capitalize;
       }
 
       .department-tech {

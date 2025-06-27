@@ -81,7 +81,7 @@ suite('LocalStorage Middleware', () => {
 
   test('should load state from localStorage successfully', () => {
     const savedState = {
-      employees: {list: [{id: '1', name: 'John'}], loading: false, error: null},
+      employees: {list: [{id: '1', name: 'Berk'}], loading: false, error: null},
     };
     localStorageStub.getItem.returns(JSON.stringify(savedState));
 

@@ -95,6 +95,7 @@ suite('List Employee Page Component', () => {
       },
       ui: {
         viewMode: 'list',
+        search: '',
         pagination: {
           currentPage: 2,
           itemsPerPage: 20,

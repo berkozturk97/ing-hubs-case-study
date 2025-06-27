@@ -95,8 +95,8 @@ suite('Employee Actions', () => {
     suite('setEmployees', () => {
       test('should create an action to set all employees', () => {
         const employees = [
-          {id: '1', firstName: 'John', lastName: 'Doe'},
-          {id: '2', firstName: 'Jane', lastName: 'Smith'},
+          {id: '1', firstName: 'Berk', lastName: 'Ozturk'},
+          {id: '2', firstName: 'Ahmet', lastName: 'Yilmaz'},
         ];
 
         const action = setEmployees(employees);

@@ -5,12 +5,14 @@ import {
   setViewMode,
   setCurrentPage,
   setItemsPerPage,
+  setSearchFilter,
 } from '../store/actions/ui.js';
 import {deleteEmployeeAsync} from '../store/actions/employees.js';
 import {toastService} from '../utils/toast-service.js';
 import '../components/loading-spinner.js';
 import '../components/employee-table.js';
 import '../components/employee-list.js';
+import '../components/search-bar.js';
 
 export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
   static get properties() {
@@ -20,6 +22,7 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
       viewMode: {type: String},
       currentPage: {type: Number},
       itemsPerPage: {type: Number},
+      searchTerm: {type: String},
     };
   }
 
@@ -30,16 +33,46 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
     this.viewMode = 'table';
     this.currentPage = 1;
     this.itemsPerPage = 10;
+    this.searchTerm = '';
   }
 
   stateChanged(state) {
     super.stateChanged(state);
 
-    this.employees = state.employees.list || [];
-    this.loading = state.employees.loading || false;
-    this.viewMode = state.ui.viewMode || 'table';
-    this.currentPage = state.ui.pagination.currentPage || 1;
-    this.itemsPerPage = state.ui.pagination.itemsPerPage || 10;
+    const allEmployees = state.employees?.list || [];
+    this.searchTerm = state.ui?.filters?.search || '';
+
+    // Filter employees based on search term
+    this.employees = this._filterEmployees(allEmployees, this.searchTerm);
+
+    this.loading = state.employees?.loading || false;
+    this.viewMode = state.ui?.viewMode || 'table';
+    this.currentPage = state.ui?.pagination?.currentPage || 1;
+    this.itemsPerPage = state.ui?.pagination?.itemsPerPage || 10;
+  }
+
+  _filterEmployees(employees, searchTerm) {
+    if (!searchTerm || searchTerm.trim() === '') {
+      return employees;
+    }
+
+    const lowercaseSearch = searchTerm.toLowerCase().trim();
+
+    return employees.filter((employee) => {
+      const searchableFields = [
+        employee.firstName,
+        employee.lastName,
+        employee.email,
+        employee.phoneNumber,
+        employee.department,
+        employee.position,
+      ];
+
+      return searchableFields.some(
+        (field) =>
+          field && field.toString().toLowerCase().includes(lowercaseSearch)
+      );
+    });
   }
   static get styles() {
     return css`
@@ -70,6 +103,14 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
         display: flex;
         align-items: center;
         gap: 16px;
+      }
+
+      .search-section {
+        margin-bottom: 24px;
+      }
+
+      .search-section search-bar {
+        max-width: 400px;
       }
 
       .view-toggle {
@@ -141,6 +182,10 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
         .view-controls {
           justify-content: center;
         }
+
+        .search-section search-bar {
+          max-width: 100%;
+        }
       }
     `;
   }
@@ -157,6 +202,11 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
   _handleItemsPerPageChange(event) {
     const {itemsPerPage} = event.detail;
     store.dispatch(setItemsPerPage(itemsPerPage));
+  }
+
+  _handleSearch(event) {
+    const {searchTerm} = event.detail;
+    store.dispatch(setSearchFilter(searchTerm));
   }
 
   _handleEmployeeDelete(event) {
@@ -220,6 +270,13 @@ export class ListEmployeePage extends ReduxLocalizedMixin(LitElement) {
             </button>
           </div>
         </div>
+      </div>
+
+      <div class="search-section">
+        <search-bar
+          @search="${this._handleSearch}"
+          ?disabled="${this.loading}"
+        ></search-bar>
       </div>
 
       <div class="content-area">

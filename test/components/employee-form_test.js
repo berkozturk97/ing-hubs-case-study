@@ -146,17 +146,17 @@ suite('Employee Form Component', () => {
     expect(errors.firstName).to.equal('Name must be at least 2 characters');
 
     // Test invalid characters
-    errors = element._validateField('firstName', 'John123');
+    errors = element._validateField('firstName', 'Berk123');
     expect(errors.firstName).to.equal(
       'Name can only contain letters and spaces'
     );
 
     // Test valid name
-    errors = element._validateField('firstName', 'John');
+    errors = element._validateField('firstName', 'Berk');
     expect(Object.keys(errors)).to.have.length(0);
 
     // Test valid name with spaces
-    errors = element._validateField('firstName', 'John Doe');
+    errors = element._validateField('firstName', 'Berk Ozturk');
     expect(Object.keys(errors)).to.have.length(0);
   });
 
@@ -169,12 +169,12 @@ suite('Employee Form Component', () => {
     errors = element._validateField('lastName', 'A');
     expect(errors.lastName).to.equal('Name must be at least 2 characters');
 
-    errors = element._validateField('lastName', 'Smith123');
+    errors = element._validateField('lastName', 'Ozturk123');
     expect(errors.lastName).to.equal(
       'Name can only contain letters and spaces'
     );
 
-    errors = element._validateField('lastName', 'Smith');
+    errors = element._validateField('lastName', 'Ozturk');
     expect(Object.keys(errors)).to.have.length(0);
   });
 

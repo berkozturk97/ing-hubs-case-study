@@ -34,7 +34,7 @@ suite('UI Actions', () => {
   });
 
   test('should create setSearchFilter action', () => {
-    const searchTerm = 'John Doe';
+    const searchTerm = 'Berk Ozturk';
     const action = setSearchFilter(searchTerm);
 
     expect(action.type).to.equal(SET_SEARCH_FILTER);

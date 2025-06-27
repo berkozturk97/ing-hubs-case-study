@@ -1,136 +1,187 @@
-# LitElement JavaScript starter
+# 🏢 ING Hubs Case Study
 
-This project includes a sample component using LitElement with JavaScript.
+<div align="center">
 
-This template is generated from the `lit-starter-js` package in [the main Lit
-repo](https://github.com/lit/lit). Issues and PRs for this template should be
-filed in that repo.
+![Project Status](https://img.shields.io/badge/status-completed-brightgreen)
+![LitElement](https://img.shields.io/badge/LitElement-3.2.0-blue?style=flat&logo=lit&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2021-yellow?style=flat&logo=javascript&logoColor=white)
+![Redux](https://img.shields.io/badge/Redux-5.0.1-purple?style=flat&logo=redux&logoColor=white)
+![Web Components](https://img.shields.io/badge/Web_Components-native-green?style=flat)
+![Testing](https://img.shields.io/badge/Testing-Web_Test_Runner-orange?style=flat)
 
-## About this release
+**A modern, scalable employee management system built with LitElement and Web Components, showcasing advanced patterns with comprehensive CRUD operations, internationalization, and responsive design.**
 
-This is a pre-release of Lit 3.0, the next major version of Lit.
 
-Lit 3.0 has very few breaking changes from Lit 2.0:
+</div>
 
-- Drops support for IE11
-- Published as ES2021
-- Removes a couple of deprecated Lit 1.x APIs
+---
 
-Lit 3.0 should require no changes to upgrade from Lit 2.0 for the vast majority of users. Once the full release is published, most apps and libraries will be able to extend their npm version ranges to include both 2.x and 3.x, like `"^2.7.0 || ^3.0.0"`.
+## 📋 Table of Contents
 
-Lit 2.x and 3.0 are _interoperable_: templates, base classes, directives, decorators, etc., from one version of Lit will work with those from another.
+- [🏢 ING Hubs Case Study](#-ing-hubs-case-study)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [✨ Project Overview](#-project-overview)
+  - [🚀 Key Features](#-key-features)
+  - [🏗️ Project Architecture](#️-project-architecture)
+    - [📁 Folder Structure](#-folder-structure)
+    - [🔧 Architecture Patterns](#-architecture-patterns)
+  - [⚡ Getting Started](#-getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+    - [Development](#development)
+---
 
-Please file any issues you find on our [issue tracker](https://github.com/lit/lit/issues).
+## ✨ Project Overview
 
-## Setup
+ING Hubs Case Study is a comprehensive **LitElement Web Components application** that demonstrates modern frontend development practices through a complete employee management system. Built as a showcase of technical expertise, this project implements advanced patterns including internationalization, Redux state management, responsive design, and comprehensive testing coverage.
 
-Install dependencies:
+**🎯 Project Goals:**
+- Demonstrate proficiency in modern Web Components development
+- Showcase advanced state management with Redux
+- Implement professional UX patterns and responsive design
+- Provide a scalable, maintainable component-based architecture
+- Highlight internationalization and accessibility best practices
 
-```bash
-npm i
+**🔍 What Makes This Special:**
+- **Native Web Components** with LitElement for maximum compatibility
+- **Production-ready** patterns with comprehensive error handling
+- **Accessibility-first** design with ARIA support and keyboard navigation
+- **Mobile-responsive** interface with touch-friendly interactions
+- **Internationalization** support with English and Turkish languages
+- **Comprehensive testing** with high coverage and quality metrics
+
+---
+
+## 🚀 Key Features
+
+### 📊 Employee Management
+- **Complete CRUD Operations**: Create, read, update, and delete employees with validation
+- **Advanced Search System**: Real-time search across all employee fields
+- **Multiple View Modes**: Toggle between table and list views for different use cases
+- **Pagination System**: Efficient data navigation with customizable page sizes
+
+### 🎨 User Interface
+- **Responsive Design**: Mobile-first approach with breakpoint optimization
+- **Modal System**: Portal-based modals with smooth animations and focus management
+- **Toast Notifications**: Contextual feedback with success/error messaging
+- **View Toggle**: Switch between table and list views seamlessly
+
+---
+
+## 🏗️ Project Architecture
+
+### 📁 Folder Structure
+
+```
+src/
+├── 📁 components/          # Reusable UI components
+│   ├── 🎨 modal.js         # Portal-based modal system
+│   ├── 📝 employee-form.js # Employee creation/editing forms
+│   ├── 📊 employee-table.js # Sortable, responsive data table
+│   ├── 📋 employee-list.js # Card-based list view
+│   ├── 🔍 search-bar.js    # Real-time search component
+│   ├── 📄 pagination.js    # Advanced pagination controls
+│   ├── 🍞 toast.js         # Notification toast component
+│   ├── ⏳ loading-spinner.js # Loading state indicators
+│   ├── 🔘 custom-button.js # Themed button component
+│   └── 🚪 navigation-bar.js # App navigation header
+├── 📁 pages/               # Page-level components
+│   ├── 📋 list-employee-page.js # Employee listing interface
+│   ├── ➕ create-employee-page.js # Employee creation page
+│   └── ✏️ edit-employee-page.js # Employee editing interface
+├── 📁 store/               # Redux store configuration
+│   ├── 🏪 index.js         # Store setup with middleware
+│   ├── 📁 actions/         # Redux action creators
+│   │   ├── 👥 employees.js # Employee-related actions
+│   │   ├── 🎨 ui.js        # UI state actions
+│   │   └── 🏷️ types.js     # Action type constants
+│   ├── 📁 reducers/        # Redux reducers
+│   │   ├── 👥 employees.js # Employee state management
+│   │   ├── 🎨 ui.js        # UI state management
+│   │   └── 📋 index.js     # Root reducer combination
+│   └── 📁 middleware/      # Custom Redux middleware
+│       └── 💾 localStorage.js # Local storage persistence
+├── 📁 localization/        # Internationalization
+│   ├── 🌍 index.js         # Localization setup
+│   ├── 🔧 localization-service.js # Language management
+│   ├── 🔗 redux-localization.js # Redux localization integration
+│   ├── 🎭 redux-localized-mixin.js # Localization mixin for components
+│   └── 📁 languages/       # Language files
+│       ├── 🇺🇸 en.js       # English translations
+│       └── 🇹🇷 tr.js       # Turkish translations
+├── 📁 utils/               # Utility functions
+│   ├── 🛤️ router.js        # Routing configuration
+│   └── 🍞 toast-service.js # Toast notification service
+└── 📁 assets/              # Static assets
+    └── 📁 svgs/            # SVG icons and graphics
+        └── 🏢 logo.svg     # Application logo
 ```
 
-## Testing
+---
 
-This sample modern-web.dev's
-[@web/test-runner](https://www.npmjs.com/package/@web/test-runner) for testing. See the
-[modern-web.dev testing documentation](https://modern-web.dev/docs/test-runner/overview) for
-more information.
+## ⚡ Getting Started
 
-Tests can be run with the `test` script, which will run your tests against Lit's development mode (with more verbose errors) as well as against Lit's production mode:
+### Prerequisites
+
+Before running this project, ensure you have the following installed:
+
+- **Node.js** (v18.0.0 or higher) - [Download](https://nodejs.org/)
+- **npm** (v8.0.0 or higher) - Comes with Node.js
+- **Git** - [Download](https://git-scm.com/)
+
+You can verify your installations:
 
 ```bash
-npm test
+node --version    # Should show v18.0.0+
+npm --version     # Should show 8.0.0+
+git --version     # Should show any recent version
 ```
 
-For local testing during development, the `test:dev:watch` command will run your tests in Lit's development mode (with verbose errors) on every change to your source files:
+### Installation
 
-```bash
-npm test:watch
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/ing-hubs-case-study.git
+   cd ing-hubs-case-study
+   ```
 
-Alternatively the `test:prod` and `test:prod:watch` commands will run your tests in Lit's production mode.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Dev Server
+3. **Verify installation**
+   ```bash
+   npm run lint      # Check code quality
+   npm test          # Run test suite
+   npm run test:coverage # Check coverage
+   ```
 
-This sample uses modern-web.dev's [@web/dev-server](https://www.npmjs.com/package/@web/dev-server) for previewing the project without additional build steps. Web Dev Server handles resolving Node-style "bare" import specifiers, which aren't supported in browsers. It also automatically transpiles JavaScript and adds polyfills to support older browsers. See [modern-web.dev's Web Dev Server documentation](https://modern-web.dev/docs/dev-server/overview/) for more information.
+### Development
 
-To run the dev server and open the project in a new browser tab:
-
+**🚀 Start the development server:**
 ```bash
 npm run serve
 ```
 
-There is a development HTML file located at `/dev/index.html` that you can view at http://localhost:8000/dev/index.html. Note that this command will serve your code using Lit's development mode (with more verbose errors). To serve your code against Lit's production mode, use `npm run serve:prod`.
+**📊 View Test Coverage:**
 
-## Editing
-
-If you use VS Code, we highly recommend the [lit-plugin extension](https://marketplace.visualstudio.com/items?itemName=runem.lit-plugin), which enables some extremely useful features for lit-html templates:
-
-- Syntax highlighting
-- Type-checking
-- Code completion
-- Hover-over docs
-- Jump to definition
-- Linting
-- Quick Fixes
-
-The project is setup to recommend lit-plugin to VS Code users if they don't already have it installed.
-
-## Linting
-
-Linting of JavaScript files is provided by [ESLint](eslint.org). In addition, [lit-analyzer](https://www.npmjs.com/package/lit-analyzer) is used to type-check and lint lit-html templates with the same engine and rules as lit-plugin.
-
-The rules are mostly the recommended rules from each project, but some have been turned off to make LitElement usage easier. The recommended rules are pretty strict, so you may want to relax them by editing `.eslintrc.json`.
-
-To lint the project run:
+After running the test coverage command, you can view the detailed coverage report:
 
 ```bash
-npm run lint
+npm run test:coverage
 ```
 
-## Formatting
+Then open the coverage report in your browser:
+- **Coverage Report**: [coverage/lcov-report/index.html](coverage/lcov-report/index.html)
 
-[Prettier](https://prettier.io/) is used for code formatting. It has been pre-configured according to the Lit's style. You can change this in `.prettierrc.json`.
+The coverage report provides detailed information about:
+- Line coverage across all components
+- Function coverage statistics  
+- Branch coverage analysis
+- Uncovered code highlighting
 
-Prettier has not been configured to run when committing files, but this can be added with Husky and `pretty-quick`. See the [prettier.io](https://prettier.io/) site for instructions.
 
-## Static Site
 
-This project includes a simple website generated with the [eleventy](https://11ty.dev) static site generator and the templates and pages in `/docs-src`. The site is generated to `/docs` and intended to be checked in so that GitHub pages can serve the site [from `/docs` on the main branch](https://help.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
 
-To enable the site go to the GitHub settings and change the GitHub Pages &quot;Source&quot; setting to &quot;main branch /docs folder&quot;.</p>
 
-To build the site, run:
-
-```bash
-npm run docs
-```
-
-To serve the site locally, run:
-
-```bash
-npm run docs:serve
-```
-
-To watch the site files, and re-build automatically, run:
-
-```bash
-npm run docs:gen:watch
-```
-
-The site will usually be served at http://localhost:8000.
-
-**Note**: The project uses Rollup to bundle and minify the source code for the docs site and not to publish to NPM. For bundling and minification, check the [Bundling and minification](#bundling-and-minification) section.
-
-## Bundling and minification
-
-As stated in the [static site generation](#static-site) section, the bundling and minification setup in the Rollup configuration in this project is there specifically for the docs generation.
-
-We recommend publishing components as unoptimized JavaScript modules and performing build-time optimizations at the application level. This gives build tools the best chance to deduplicate code, remove dead code, and so on.
-
-Please check the [Publishing best practices](https://lit.dev/docs/tools/publishing/#publishing-best-practices) for information on publishing reusable Web Components, and [Build for production](https://lit.dev/docs/tools/production/) for building application projects that include LitElement components, on the Lit site.
-
-## More information
-
-See [Get started](https://lit.dev/docs/getting-started/) on the Lit site for more information.

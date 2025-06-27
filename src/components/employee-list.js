@@ -111,7 +111,7 @@ export class EmployeeList extends ReduxLocalizedMixin(LitElement) {
         border-radius: 12px;
         font-size: 12px;
         font-weight: 500;
-        text-transform: uppercase;
+        text-transform: capitalize;
         letter-spacing: 0.5px;
       }
 

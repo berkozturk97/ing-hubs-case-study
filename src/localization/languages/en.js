@@ -36,7 +36,7 @@ export const en = {
     firstNamePlaceholder: 'Enter first name',
     lastNamePlaceholder: 'Enter last name',
     emailPlaceholder: 'Enter email address',
-    phonePlaceholder: '+1 (555) 123-4567',
+    phonePlaceholder: '+90 (555) 123-4567',
     phoneHelp: 'Include country code for international numbers',
     selectDepartment: 'Select Department',
     selectPosition: 'Select Position',

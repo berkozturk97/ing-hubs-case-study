@@ -62,12 +62,12 @@ suite('UI Reducer', () => {
 
     const action = {
       type: SET_SEARCH_FILTER,
-      payload: 'John',
+      payload: 'Berk',
     };
 
     const result = uiReducer(currentState, action);
 
-    expect(result.filters.search).to.equal('John');
+    expect(result.filters.search).to.equal('Berk');
     expect(result.pagination.currentPage).to.equal(1); // Should reset to page 1
     expect(result.pagination.itemsPerPage).to.equal(10);
   });
