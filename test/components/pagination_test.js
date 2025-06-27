@@ -1,44 +1,7 @@
 import {expect} from '@open-wc/testing';
+import {setupReduxMocks} from '../helpers/test-helpers.js';
 
-window.process = {env: {NODE_ENV: 'test'}};
-
-// Mock connect mixin from pwa-helpers
-const connect = () => (superClass) =>
-  class extends superClass {
-    connectedCallback() {
-      if (super.connectedCallback) {
-        super.connectedCallback();
-      }
-    }
-
-    disconnectedCallback() {
-      if (super.disconnectedCallback) {
-        super.disconnectedCallback();
-      }
-    }
-
-    stateChanged() {}
-  };
-
-window.connectMixin = {connect};
-
-const mockT = (keyPath, placeholders = {}) => {
-  if (keyPath === 'pagination.showing') {
-    return `Showing ${placeholders.start}-${placeholders.end} of ${placeholders.total}`;
-  }
-  if (keyPath === 'pagination.prev') return 'Previous';
-  if (keyPath === 'pagination.next') return 'Next';
-  if (keyPath === 'pagination.show') return 'Show';
-  if (keyPath === 'pagination.perPage') return 'per page';
-  return keyPath;
-};
-
-const mockGetCurrentLanguage = () => 'en';
-
-window.ReduxLocalizationMock = {
-  t: mockT,
-  getCurrentLanguage: mockGetCurrentLanguage,
-};
+const {mockT} = setupReduxMocks();
 
 suite('Pagination Component Methods', () => {
   let PaginationClass;

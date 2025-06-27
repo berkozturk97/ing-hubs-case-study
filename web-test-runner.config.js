@@ -128,8 +128,8 @@ export default {
           },
           {
             name: 'process-polyfill',
-            code: 'window.global = window.global || window; window.global.process = window.global.process || {env: {NODE_ENV: "test"}}; window.process = window.global.process;',
-            test: "typeof global === 'undefined' || typeof process === 'undefined'",
+            code: 'window.process = {env: {NODE_ENV: "test"}};',
+            test: "typeof process === 'undefined'",
             module: false,
           },
         ],

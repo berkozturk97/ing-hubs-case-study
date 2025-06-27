@@ -282,11 +282,7 @@ export class EmployeeTable extends ReduxLocalizedMixin(LitElement) {
 
   _formatDate(dateString) {
     if (!dateString) return '-';
-    try {
-      return new Date(dateString).toLocaleDateString();
-    } catch (error) {
-      return '-';
-    }
+    return new Date(dateString).toLocaleDateString();
   }
 
   _formatPhone(phone) {
