@@ -26,7 +26,6 @@
     - [📁 Folder Structure](#-folder-structure)
     - [🔧 Architecture Patterns](#-architecture-patterns)
   - [⚡ Getting Started](#-getting-started)
-    - [Prerequisites](#prerequisites)
     - [Installation](#installation)
     - [Development](#development)
 ---
@@ -120,22 +119,6 @@ src/
 ---
 
 ## ⚡ Getting Started
-
-### Prerequisites
-
-Before running this project, ensure you have the following installed:
-
-- **Node.js** (v18.0.0 or higher) - [Download](https://nodejs.org/)
-- **npm** (v8.0.0 or higher) - Comes with Node.js
-- **Git** - [Download](https://git-scm.com/)
-
-You can verify your installations:
-
-```bash
-node --version    # Should show v18.0.0+
-npm --version     # Should show 8.0.0+
-git --version     # Should show any recent version
-```
 
 ### Installation
 
