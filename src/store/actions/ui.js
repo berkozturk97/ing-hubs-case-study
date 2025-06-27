@@ -2,9 +2,6 @@ import {
   SET_VIEW_MODE,
   SET_CURRENT_ROUTE,
   SET_SEARCH_FILTER,
-  SET_DEPARTMENT_FILTER,
-  SET_POSITION_FILTER,
-  CLEAR_FILTERS,
   SET_CURRENT_PAGE,
   SET_ITEMS_PER_PAGE,
   SET_LANGUAGE,
@@ -23,20 +20,6 @@ export const setCurrentRoute = (route) => ({
 export const setSearchFilter = (searchTerm) => ({
   type: SET_SEARCH_FILTER,
   payload: searchTerm,
-});
-
-export const setDepartmentFilter = (department) => ({
-  type: SET_DEPARTMENT_FILTER,
-  payload: department,
-});
-
-export const setPositionFilter = (position) => ({
-  type: SET_POSITION_FILTER,
-  payload: position,
-});
-
-export const clearFilters = () => ({
-  type: CLEAR_FILTERS,
 });
 
 export const setCurrentPage = (page) => ({

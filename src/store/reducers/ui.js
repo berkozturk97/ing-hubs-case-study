@@ -2,9 +2,6 @@ import {
   SET_VIEW_MODE,
   SET_CURRENT_ROUTE,
   SET_SEARCH_FILTER,
-  SET_DEPARTMENT_FILTER,
-  SET_POSITION_FILTER,
-  CLEAR_FILTERS,
   SET_CURRENT_PAGE,
   SET_ITEMS_PER_PAGE,
   SET_LANGUAGE,
@@ -49,46 +46,6 @@ export const uiReducer = (state = initialState, action) => {
         pagination: {
           ...state.pagination,
           currentPage: 1, // Reset to first page when searching
-        },
-      };
-
-    case SET_DEPARTMENT_FILTER:
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          department: action.payload,
-        },
-        pagination: {
-          ...state.pagination,
-          currentPage: 1, // Reset to first page when filtering
-        },
-      };
-
-    case SET_POSITION_FILTER:
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          position: action.payload,
-        },
-        pagination: {
-          ...state.pagination,
-          currentPage: 1, // Reset to first page when filtering
-        },
-      };
-
-    case CLEAR_FILTERS:
-      return {
-        ...state,
-        filters: {
-          search: '',
-          department: '',
-          position: '',
-        },
-        pagination: {
-          ...state.pagination,
-          currentPage: 1,
         },
       };
 

@@ -14,9 +14,6 @@ export const SET_LANGUAGE = 'SET_LANGUAGE';
 
 // Filter Actions
 export const SET_SEARCH_FILTER = 'SET_SEARCH_FILTER';
-export const SET_DEPARTMENT_FILTER = 'SET_DEPARTMENT_FILTER';
-export const SET_POSITION_FILTER = 'SET_POSITION_FILTER';
-export const CLEAR_FILTERS = 'CLEAR_FILTERS';
 
 // Pagination Actions
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
